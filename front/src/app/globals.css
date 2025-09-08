@@ -1,0 +1,138 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Business Management Pink Theme */
+    --background: 350 100% 98%;
+    --foreground: 340 30% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 340 30% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 340 30% 15%;
+
+    /* Primary - Deep Pink */
+    --primary: 328 82% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - Light Pink */
+    --secondary: 320 50% 85%;
+    --secondary-foreground: 340 30% 15%;
+
+    /* Muted - Very Light Pink */
+    --muted: 320 30% 95%;
+    --muted-foreground: 340 20% 45%;
+
+    /* Accent - Medium Pink */
+    --accent: 325 70% 75%;
+    --accent-foreground: 340 30% 15%;
+
+    /* Pink Variants */
+    --pink-primary: 328 82% 55%;
+    --pink-secondary: 320 50% 85%;
+    --pink-light: 320 30% 95%;
+    --pink-medium: 325 70% 75%;
+    
+    /* Gray Section */
+    --gray-section: 0 0% 92%;
+    --gray-section-foreground: 340 30% 25%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 320 20% 85%;
+    --input: 320 20% 90%;
+    --ring: 328 82% 55%;
+
+    --radius: 0.5rem;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--pink-primary)), hsl(var(--pink-medium)));
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--pink-secondary)), hsl(var(--pink-light)));
+    --gradient-header: linear-gradient(90deg, hsl(var(--pink-primary)), hsl(var(--accent)));
+
+    /* Shadows */
+    --shadow-pink: 0 4px 20px hsl(var(--pink-primary) / 0.15);
+    --shadow-soft: 0 2px 10px hsl(var(--pink-primary) / 0.1);
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Dark mode with deeper pinks */
+    --background: 340 30% 8%;
+    --foreground: 320 30% 90%;
+
+    --card: 340 25% 12%;
+    --card-foreground: 320 30% 90%;
+
+    --popover: 340 25% 12%;
+    --popover-foreground: 320 30% 90%;
+
+    --primary: 328 82% 65%;
+    --primary-foreground: 340 30% 8%;
+
+    --secondary: 340 25% 18%;
+    --secondary-foreground: 320 30% 90%;
+
+    --muted: 340 20% 18%;
+    --muted-foreground: 320 15% 65%;
+
+    --accent: 325 70% 85%;
+    --accent-foreground: 340 30% 8%;
+
+    --pink-primary: 328 82% 65%;
+    --pink-secondary: 340 25% 18%;
+    --pink-light: 340 20% 18%;
+    --pink-medium: 325 70% 85%;
+    
+    --gray-section: 340 15% 15%;
+    --gray-section-foreground: 320 30% 85%;
+
+    --destructive: 0 62.8% 50%;
+    --destructive-foreground: 320 30% 90%;
+
+    --border: 340 20% 20%;
+    --input: 340 20% 20%;
+    --ring: 328 82% 65%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
