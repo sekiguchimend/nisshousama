@@ -1,5 +1,6 @@
 {
   "/page": "app/page.js",
-  "/dispatch-panel-2d/page": "app/dispatch-panel-2d/page.js",
-  "/rt2-panel/page": "app/rt2-panel/page.js"
+  "/toll-road/page": "app/toll-road/page.js",
+  "/rt2-panel/page": "app/rt2-panel/page.js",
+  "/dispatch-panel-2d/page": "app/dispatch-panel-2d/page.js"
 }
