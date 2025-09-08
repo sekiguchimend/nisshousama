@@ -1,4 +1,5 @@
 {
-  "/rt2-panel/page": "app/rt2-panel/page.js",
-  "/page": "app/page.js"
+  "/page": "app/page.js",
+  "/dispatch-panel-2d/page": "app/dispatch-panel-2d/page.js",
+  "/rt2-panel/page": "app/rt2-panel/page.js"
 }

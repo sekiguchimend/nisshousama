@@ -33,276 +33,318 @@ interface todayCastData {
 const sampleCastData: todayCastData[] = [
   {
     id: "001",
-    name: "うちう",
-    startTime: "12:00",
-    endTime: "14:00",
-    homeTime: "14:48",
-    deliverPlace: "成田",
-    achieve: "2600",
-    finalCustomer: "成田駅",
-    nowCustomer: "羽田空港",
-    inDriverMoving: "0:56",
-    next1: "",
-    next2: "",
+    name: "美咲",
+    startTime: "18:00",
+    endTime: "2:00",
+    homeTime: "21:30",
+    deliverPlace: "銀座駅",
+    achieve: "3200",
+    finalCustomer: "六本木ヒルズ",
+    nowCustomer: "六本木ヒルズ",
+    inDriverMoving: "1:15",
+    next1: "22:30 渋谷",
+    next2: "0:15 新宿",
     next3: "",
     next4: "",
     next5: "",
-    remark: "Girls",
-    special: "",
+    remark: "VIP",
+    special: "新規顧客対応",
     ngPlace: "",
     waitTime: ""
   },
   {
-    id: "002", 
-    name: "うちう",
-    startTime: "12:00",
-    endTime: "14:00",
-    homeTime: "14:48",
-    deliverPlace: "成田",
-    achieve: "2600",
-    finalCustomer: "成田駅",
-    nowCustomer: "羽田空港",
-    inDriverMoving: "0:56",
-    next1: "",
-    next2: "",
-    next3: "",
-    next4: "",
-    next5: "",
-    remark: "Girls",
-    special: "",
-    ngPlace: "",
-    waitTime: ""
-  },
-  {
-    id: "003",
-    name: "ゆりの",
-    startTime: "15:00",
-    endTime: "2:30",
-    homeTime: "22:30",
-    deliverPlace: "上野",
-    achieve: "3000",
-    finalCustomer: "羽田空港",
-    nowCustomer: "",
-    inDriverMoving: "",
-    next1: "",
-    next2: "",
-    next3: "",
+    id: "002",
+    name: "さくら",
+    startTime: "19:30",
+    endTime: "3:00",
+    homeTime: "22:45",
+    deliverPlace: "新宿駅南口",
+    achieve: "2800",
+    finalCustomer: "新宿駅南口",
+    nowCustomer: "表参道駅",
+    inDriverMoving: "0:25",
+    next1: "23:00 表参道",
+    next2: "1:30 池袋",
+    next3: "2:45 品川",
     next4: "",
     next5: "",
     remark: "Lady",
     special: "",
+    ngPlace: "歌舞伎町周辺",
+    waitTime: ""
+  },
+  {
+    id: "003",
+    name: "まゆ",
+    startTime: "20:00",
+    endTime: "4:00",
+    homeTime: "23:20",
+    deliverPlace: "恵比寿駅",
+    achieve: "4500",
+    finalCustomer: "恵比寿駅",
+    nowCustomer: "赤坂見附",
+    inDriverMoving: "0:45",
+    next1: "0:30 麻布",
+    next2: "",
+    next3: "",
+    next4: "",
+    next5: "",
+    remark: "Girls",
+    special: "VIP対応必須",
     ngPlace: "",
     waitTime: ""
   },
   {
     id: "004",
-    name: "いす",
-    startTime: "16:00",
-    endTime: "5:00",
-    homeTime: "23:00",
-    deliverPlace: "成田",
-    achieve: "1600",
-    finalCustomer: "",
+    name: "りな",
+    startTime: "18:30",
+    endTime: "1:30",
+    homeTime: "20:15",
+    deliverPlace: "羽田空港",
+    achieve: "1800",
+    finalCustomer: "お台場駅",
     nowCustomer: "",
-    inDriverMoving: "",
-    next1: "",
-    next2: "",
-    next3: "",
+    inDriverMoving: "0:15",
+    next1: "21:00 お台場",
+    next2: "23:30 豊洲",
+    next3: "0:45 晴海",
     next4: "",
     next5: "",
-    remark: "VIP",
+    remark: "新人",
     special: "",
     ngPlace: "",
-    waitTime: ""
+    waitTime: "15分"
   },
   {
     id: "005",
-    name: "あやこ",
-    startTime: "17:30",
-    endTime: "",
-    homeTime: "22:36",
-    deliverPlace: "成田",
-    achieve: "2800",
-    finalCustomer: "成田駅",
-    nowCustomer: "羽田空港",
-    inDriverMoving: "6:51",
-    next1: "",
-    next2: "",
-    next3: "",
+    name: "あいり",
+    startTime: "21:00",
+    endTime: "5:00",
+    homeTime: "1:10",
+    deliverPlace: "成田空港",
+    achieve: "5200",
+    finalCustomer: "成田空港",
+    nowCustomer: "東京駅",
+    inDriverMoving: "2:30",
+    next1: "2:00 大手町",
+    next2: "3:15 丸の内",
+    next3: "4:30 八重洲",
     next4: "",
     next5: "",
-    remark: "あや",
-    special: "",
+    remark: "SUP",
+    special: "長距離対応",
     ngPlace: "",
     waitTime: ""
   },
   {
     id: "006",
-    name: "くれあ",
-    startTime: "18:00",
-    endTime: "5:00",
-    homeTime: "20:38",
-    deliverPlace: "羽田",
-    achieve: "0",
-    finalCustomer: "",
-    nowCustomer: "",
-    inDriverMoving: "",
-    next1: "",
-    next2: "",
+    name: "ゆき",
+    startTime: "19:00",
+    endTime: "2:30",
+    homeTime: "22:00",
+    deliverPlace: "品川駅",
+    achieve: "3100",
+    finalCustomer: "品川駅",
+    nowCustomer: "五反田駅",
+    inDriverMoving: "0:40",
+    next1: "23:15 五反田",
+    next2: "1:00 目黒",
     next3: "",
     next4: "",
     next5: "",
-    remark: "小娘",
+    remark: "Lady",
     special: "",
-    ngPlace: "",
+    ngPlace: "大崎周辺",
     waitTime: ""
   },
   {
     id: "007",
-    name: "ミリア",
-    startTime: "18:00",
-    endTime: "4:00",
-    homeTime: "6:40",
-    deliverPlace: "羽田",
-    achieve: "3400",
-    finalCustomer: "羽田駅前",
-    nowCustomer: "",
-    inDriverMoving: "",
-    next1: "",
-    next2: "",
+    name: "かな",
+    startTime: "20:30",
+    endTime: "3:30",
+    homeTime: "0:45",
+    deliverPlace: "浦安駅",
+    achieve: "2400",
+    finalCustomer: "浦安駅",
+    nowCustomer: "舞浜",
+    inDriverMoving: "1:20",
+    next1: "1:30 新浦安",
+    next2: "2:45 市川",
     next3: "",
     next4: "",
     next5: "",
-    remark: "SUP",
+    remark: "Girls",
     special: "",
     ngPlace: "",
     waitTime: ""
   },
   {
     id: "008",
-    name: "新-inori-",
-    startTime: "19:00",
-    endTime: "3:00",
-    homeTime: "22:18",
-    deliverPlace: "成田",
-    achieve: "",
-    finalCustomer: "",
+    name: "えみ",
+    startTime: "18:45",
+    endTime: "1:00",
+    homeTime: "21:30",
+    deliverPlace: "横浜駅",
+    achieve: "2700",
+    finalCustomer: "みなとみらい駅",
     nowCustomer: "",
-    inDriverMoving: "",
-    next1: "",
-    next2: "",
+    inDriverMoving: "0:20",
+    next1: "22:30 みなとみらい",
+    next2: "0:15 中華街",
     next3: "",
     next4: "",
     next5: "",
-    remark: "JK",
-    special: "",
+    remark: "VIP",
+    special: "新規エリア",
     ngPlace: "",
-    waitTime: ""
+    waitTime: "10分"
   },
   {
     id: "009",
-    name: "すずな",
-    startTime: "19:00",
-    endTime: "",
-    homeTime: "1:48",
-    deliverPlace: "成田",
-    achieve: "",
-    finalCustomer: "",
-    nowCustomer: "",
-    inDriverMoving: "",
-    next1: "",
-    next2: "",
-    next3: "",
+    name: "みお",
+    startTime: "22:00",
+    endTime: "6:00",
+    homeTime: "2:20",
+    deliverPlace: "千葉駅",
+    achieve: "3800",
+    finalCustomer: "千葉駅",
+    nowCustomer: "津田沼",
+    inDriverMoving: "0:50",
+    next1: "3:00 船橋",
+    next2: "4:30 柏",
+    next3: "5:15 松戸",
     next4: "",
     next5: "",
-    remark: "すず",
-    special: "",
+    remark: "Lady",
+    special: "長時間対応",
     ngPlace: "",
     waitTime: ""
   },
   {
     id: "010",
-    name: "さやか",
-    startTime: "20:00",
-    endTime: "2:30",
-    homeTime: "6:14",
-    deliverPlace: "成田",
-    achieve: "",
-    finalCustomer: "",
-    nowCustomer: "",
-    inDriverMoving: "",
-    next1: "",
-    next2: "",
+    name: "なな",
+    startTime: "19:15",
+    endTime: "2:45",
+    homeTime: "23:10",
+    deliverPlace: "大宮駅",
+    achieve: "2900",
+    finalCustomer: "大宮駅",
+    nowCustomer: "浦和駅",
+    inDriverMoving: "0:55",
+    next1: "0:00 浦和",
+    next2: "1:30 川口",
     next3: "",
     next4: "",
     next5: "",
-    remark: "さや",
+    remark: "Girls",
     special: "",
-    ngPlace: "",
+    ngPlace: "大宮周辺繁華街",
     waitTime: ""
   },
   {
     id: "011",
-    name: "アヤナ",
-    startTime: "21:00",
-    endTime: "5:00",
-    homeTime: "22:38",
-    deliverPlace: "羽田",
-    achieve: "",
-    finalCustomer: "可児勝成",
-    nowCustomer: "",
-    inDriverMoving: "2:40",
-    next1: "",
-    next2: "",
+    name: "ひな",
+    startTime: "21:30",
+    endTime: "4:30",
+    homeTime: "1:45",
+    deliverPlace: "立川駅",
+    achieve: "1900",
+    finalCustomer: "立川駅",
+    nowCustomer: "八王子",
+    inDriverMoving: "1:05",
+    next1: "2:30 町田",
+    next2: "3:45 多摩センター",
     next3: "",
     next4: "",
     next5: "",
-    remark: "ｱﾔﾅ",
-    special: "",
+    remark: "新人",
+    special: "研修中",
     ngPlace: "",
     waitTime: ""
   },
   {
     id: "012",
-    name: "うぱな",
-    startTime: "22:00",
-    endTime: "5:00",
-    homeTime: "8:01",
-    deliverPlace: "羽田",
-    achieve: "",
-    finalCustomer: "秦直成",
-    nowCustomer: "",
-    inDriverMoving: "",
-    next1: "",
-    next2: "",
+    name: "あや",
+    startTime: "20:15",
+    endTime: "3:15",
+    homeTime: "0:30",
+    deliverPlace: "吉祥寺駅",
+    achieve: "3600",
+    finalCustomer: "吉祥寺駅",
+    nowCustomer: "三鷹",
+    inDriverMoving: "0:35",
+    next1: "1:15 調布",
+    next2: "2:30 府中",
     next3: "",
     next4: "",
     next5: "",
-    remark: "Lady",
-    special: "",
+    remark: "SUP",
+    special: "指名多数",
     ngPlace: "",
     waitTime: ""
   },
   {
     id: "013",
-    name: "らの",
-    startTime: "24:30",
-    endTime: "5:00",
-    homeTime: "1:37",
-    deliverPlace: "成田",
-    achieve: "",
-    finalCustomer: "東広志",
+    name: "れい",
+    startTime: "23:00",
+    endTime: "7:00",
+    homeTime: "3:15",
+    deliverPlace: "武蔵小杉駅",
+    achieve: "4100",
+    finalCustomer: "武蔵小杉駅",
+    nowCustomer: "川崎駅",
+    inDriverMoving: "1:10",
+    next1: "4:00 川崎",
+    next2: "5:30 横浜",
+    next3: "6:15 鶴見",
+    next4: "",
+    next5: "",
+    remark: "VIP",
+    special: "深夜専門",
+    ngPlace: "",
+    waitTime: ""
+  },
+  {
+    id: "014",
+    name: "みく",
+    startTime: "18:15",
+    endTime: "0:15",
+    homeTime: "20:50",
+    deliverPlace: "秋葉原駅",
+    achieve: "2300",
+    finalCustomer: "秋葉原駅",
+    nowCustomer: "御茶ノ水",
+    inDriverMoving: "0:25",
+    next1: "21:45 神田",
+    next2: "23:00 東京",
+    next3: "",
+    next4: "",
+    next5: "",
+    remark: "Girls",
+    special: "",
+    ngPlace: "秋葉原周辺",
+    waitTime: ""
+  },
+  {
+    id: "015",
+    name: "こはる",
+    startTime: "22:30",
+    endTime: "5:30",
+    homeTime: "2:40",
+    deliverPlace: "池袋駅",
+    achieve: "3300",
+    finalCustomer: "新宿駅",
     nowCustomer: "",
-    inDriverMoving: "",
-    next1: "",
-    next2: "",
+    inDriverMoving: "0:45",
+    next1: "3:30 新宿",
+    next2: "4:45 渋谷",
     next3: "",
     next4: "",
     next5: "",
     remark: "Lady",
-    special: "",
+    special: "夜間専門",
     ngPlace: "",
-    waitTime: ""
+    waitTime: "20分"
   }
 ];
 
@@ -394,24 +436,58 @@ export default function RT2Panel() {
       <Card>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
-            <table className="w-full text-xs">
+            <table className="w-full text-xs table-fixed">
+              <colgroup>
+                <col style={{width: '80px'}} />
+                <col style={{width: '80px'}} />
+                <col style={{width: '60px'}} />
+                <col style={{width: '60px'}} />
+                <col style={{width: '60px'}} />
+                <col style={{width: '100px'}} />
+                <col style={{width: '150px'}} />
+                <col style={{width: '32px'}} />
+                <col style={{width: '150px'}} />
+                <col style={{width: '32px'}} />
+                <col style={{width: '150px'}} />
+                <col style={{width: '32px'}} />
+                <col style={{width: '150px'}} />
+                <col style={{width: '32px'}} />
+                <col style={{width: '150px'}} />
+                <col style={{width: '32px'}} />
+                <col style={{width: '150px'}} />
+                <col style={{width: '32px'}} />
+                <col style={{width: '150px'}} />
+                <col style={{width: '32px'}} />
+                <col style={{width: '150px'}} />
+                <col style={{width: '32px'}} />
+                <col style={{width: '100px'}} />
+                <col style={{width: '100px'}} />
+                <col style={{width: '120px'}} />
+              </colgroup>
               <thead>
-                <tr className="bg-gray-200">
+                <tr className="bg-white">
                   <th className="border border-gray-300 px-2 py-1 text-center">名前</th>
                   <th className="border border-gray-300 px-2 py-1 text-center">Girls</th>
-                  <th className="border border-gray-300 px-2 py-1 text-center">受付</th>
-                  <th className="border border-gray-300 px-2 py-1 text-center">終了</th>
-                  <th className="border border-gray-300 px-2 py-1 text-center">帰宅</th>
-                  <th className="border border-gray-300 px-2 py-1 text-center">迎場所</th>
-                  <th className="border border-gray-300 px-2 py-1 text-center">営業所等</th>
-                  <th className="border border-gray-300 px-2 py-1 text-center">稼働状況</th>
-                  <th className="border border-gray-300 px-2 py-1 text-center">時刻</th>
+                  <th className="border-t border-b border-gray-300 px-2 py-1 text-center">受付</th>
+                  <th className="border-t border-b border-gray-300 px-2 py-1 text-center">終了</th>
+                  <th className="border-t border-b border-gray-300 px-2 py-1 text-center">帰宅</th>
+                  <th className="border-t border-b border-gray-300 px-2 py-1 text-center">迎場所</th>
+                  <th className="border border-gray-300 px-2 py-1 text-center">最終接客</th>
+                  <th className="border border-gray-300 px-1 py-1 text-center"></th>
+                  <th className="border border-gray-300 px-2 py-1 text-center">接客中</th>
+                  <th className="border border-gray-300 px-1 py-1 text-center"></th>
                   <th className="border border-gray-300 px-2 py-1 text-center">INドライバー稼働中</th>
+                  <th className="border border-gray-300 px-1 py-1 text-center"></th>
                   <th className="border border-gray-300 px-2 py-1 text-center">予約1</th>
+                  <th className="border border-gray-300 px-1 py-1 text-center"></th>
                   <th className="border border-gray-300 px-2 py-1 text-center">予約2</th>
+                  <th className="border border-gray-300 px-1 py-1 text-center"></th>
                   <th className="border border-gray-300 px-2 py-1 text-center">予約3</th>
+                  <th className="border border-gray-300 px-1 py-1 text-center"></th>
                   <th className="border border-gray-300 px-2 py-1 text-center">予約4</th>
+                  <th className="border border-gray-300 px-1 py-1 text-center"></th>
                   <th className="border border-gray-300 px-2 py-1 text-center">予約5</th>
+                  <th className="border border-gray-300 px-1 py-1 text-center"></th>
                   <th className="border border-gray-300 px-2 py-1 text-center">出席備考</th>
                   <th className="border border-gray-300 px-2 py-1 text-center">特記事項</th>
                   <th className="border border-gray-300 px-2 py-1 text-center">ホステスNG確認</th>
@@ -419,93 +495,157 @@ export default function RT2Panel() {
               </thead>
               <tbody>
                 {sampleCastData.map((cast) => (
-                  <tr key={cast.id} className="hover:bg-gray-50">
+                  <tr key={cast.id} className="bg-yellow-50 hover:bg-yellow-100/70">
                     {/* 名前 */}
                     <td className="border border-gray-300 px-2 py-1 text-center">
-                      <div className="text-blue-600 font-bold">{cast.name}</div>
+                      <div className="text-black font-bold">{cast.name}</div>
                     </td>
                     {/* Girls */}
                     <td className="border border-gray-300 px-2 py-1 text-center">
-                      <span className="text-blue-600">{cast.remark}</span>
+                      <span className="text-black">{cast.remark}</span>
                       {cast.achieve && (
                         <div className="text-red-600">{cast.achieve}</div>
                       )}
                     </td>
                     {/* 受付 */}
-                    <td className="border border-gray-300 px-2 py-1 text-center">
-                      <div className="text-blue-600">{cast.startTime}</div>
+                    <td className="border-t border-b border-gray-300 px-2 py-1 text-center">
+                      <div className="text-black">{cast.startTime}</div>
                     </td>
                     {/* 終了 */}
-                    <td className="border border-gray-300 px-2 py-1 text-center">
-                      <div className="text-blue-600">{cast.endTime}</div>
+                    <td className="border-t border-b border-gray-300 px-2 py-1 text-center">
+                      <div className="text-black">{cast.endTime}</div>
                     </td>
                     {/* 帰宅 */}
-                    <td className="border border-gray-300 px-2 py-1 text-center">
-                      <div className="text-blue-600">{cast.homeTime}</div>
+                    <td className="border-t border-b border-gray-300 px-2 py-1 text-center">
+                      <div className="text-black">{cast.homeTime}</div>
                     </td>
-                    {/* 営業所等 */}
-                    <td className="border border-gray-300 px-2 py-1 text-center">
-                      <div className="text-blue-600">{cast.deliverPlace}</div>
+                    {/* 迎場所 */}
+                    <td className="border-t border-b border-gray-300 px-2 py-1 text-center">
+                      <div className="text-black">{cast.deliverPlace}</div>
                     </td>
-                    {/* 稼働状況 */}
+                    {/* 最終接客 */}
                     <td className="border border-gray-300 px-2 py-1 text-center">
-                      {cast.nowCustomer ? (
-                        <div className="bg-red-500 text-white text-xs px-2 py-1 rounded">
-                          稼働中
-                        </div>
-                      ) : cast.finalCustomer ? (
-                        <div className="bg-yellow-500 text-black text-xs px-2 py-1 rounded">
-                          待機
-                        </div>
-                      ) : (
-                        <div className="bg-gray-500 text-white text-xs px-2 py-1 rounded">
-                          待機
-                        </div>
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="text-black">{cast.finalCustomer}</div>
+                        <div className="text-red-600">{cast.homeTime}</div>
+                      </div>
+                    </td>
+                    {/* 最終接客ボタン */}
+                    <td className="border border-gray-300 p-0 text-center">
+                      {cast.finalCustomer && (
+                        <button className="w-full h-full bg-green-700 hover:bg-green-800 text-white text-xs border-0 flex items-center justify-center rounded-none rounded-none">＜</button>
                       )}
                     </td>
-                    {/* 時刻 */}
+                    {/* 接客中 */}
                     <td className="border border-gray-300 px-2 py-1 text-center">
-                      <div className="text-red-600 font-mono">{cast.homeTime}</div>
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="text-black">{cast.nowCustomer || "待機中"}</div>
+                        <div className="text-red-600">{cast.homeTime}</div>
+                      </div>
+                    </td>
+                    {/* 接客中ボタン */}
+                    <td className="border border-gray-300 p-0 text-center">
+                      {cast.nowCustomer && (
+                        <button className="w-full h-full bg-green-700 hover:bg-green-800 text-white text-xs border-0 flex items-center justify-center rounded-none">＜</button>
+                      )}
                     </td>
                     {/* INドライバー稼働中 */}
                     <td className="border border-gray-300 px-2 py-1 text-center">
-                      {cast.finalCustomer && (
-                        <div className="text-blue-600">{cast.finalCustomer}</div>
-                      )}
-                      {cast.nowCustomer && (
-                        <div className="text-blue-600">{cast.nowCustomer}</div>
-                      )}
-                      {cast.inDriverMoving && (
-                        <div className="text-red-600">{cast.inDriverMoving}</div>
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="text-black">{cast.nowCustomer || cast.deliverPlace}</div>
+                        {cast.inDriverMoving && (
+                          <div className="text-red-600">{cast.inDriverMoving}</div>
+                        )}
+                      </div>
+                    </td>
+                    {/* INドライバー稼働中ボタン */}
+                    <td className="border border-gray-300 p-0 text-center">
+                      {(cast.nowCustomer || cast.deliverPlace) && (
+                        <button className="w-full h-full bg-green-700 hover:bg-green-800 text-white text-xs border-0 flex items-center justify-center rounded-none">＜</button>
                       )}
                     </td>
                     {/* 予約1 */}
                     <td className="border border-gray-300 px-2 py-1 text-center">
-                      <div className="text-blue-600">{cast.next1}</div>
+                      {cast.next1 && (
+                        <div className="flex items-center justify-center gap-2">
+                          <div className="text-black">{cast.next1.split(' ')[1] || cast.next1}</div>
+                          <div className="text-red-600">{cast.next1.split(' ')[0] || ''}</div>
+                        </div>
+                      )}
+                    </td>
+                    {/* 予約1ボタン */}
+                    <td className="border border-gray-300 p-0 text-center">
+                      {cast.next1 && (
+                        <button className="w-full h-full bg-green-700 hover:bg-green-800 text-white text-xs border-0 flex items-center justify-center rounded-none">＜</button>
+                      )}
                     </td>
                     {/* 予約2 */}
                     <td className="border border-gray-300 px-2 py-1 text-center">
-                      <div className="text-blue-600">{cast.next2}</div>
+                      {cast.next2 && (
+                        <div className="flex items-center justify-center gap-2">
+                          <div className="text-black">{cast.next2.split(' ')[1] || cast.next2}</div>
+                          <div className="text-red-600">{cast.next2.split(' ')[0] || ''}</div>
+                        </div>
+                      )}
+                    </td>
+                    {/* 予約2ボタン */}
+                    <td className="border border-gray-300 p-0 text-center">
+                      {cast.next2 && (
+                        <button className="w-full h-full bg-green-700 hover:bg-green-800 text-white text-xs border-0 flex items-center justify-center rounded-none">＜</button>
+                      )}
                     </td>
                     {/* 予約3 */}
                     <td className="border border-gray-300 px-2 py-1 text-center">
-                      <div className="text-blue-600">{cast.next3}</div>
+                      {cast.next3 && (
+                        <div className="flex items-center justify-center gap-2">
+                          <div className="text-black">{cast.next3.split(' ')[1] || cast.next3}</div>
+                          <div className="text-red-600">{cast.next3.split(' ')[0] || ''}</div>
+                        </div>
+                      )}
+                    </td>
+                    {/* 予約3ボタン */}
+                    <td className="border border-gray-300 p-0 text-center">
+                      {cast.next3 && (
+                        <button className="w-full h-full bg-green-700 hover:bg-green-800 text-white text-xs border-0 flex items-center justify-center rounded-none">＜</button>
+                      )}
                     </td>
                     {/* 予約4 */}
                     <td className="border border-gray-300 px-2 py-1 text-center">
-                      <div className="text-blue-600">{cast.next4}</div>
+                      {cast.next4 && (
+                        <div className="flex items-center justify-center gap-2">
+                          <div className="text-black">{cast.next4.split(' ')[1] || cast.next4}</div>
+                          <div className="text-red-600">{cast.next4.split(' ')[0] || ''}</div>
+                        </div>
+                      )}
+                    </td>
+                    {/* 予約4ボタン */}
+                    <td className="border border-gray-300 p-0 text-center">
+                      {cast.next4 && (
+                        <button className="w-full h-full bg-green-700 hover:bg-green-800 text-white text-xs border-0 flex items-center justify-center rounded-none">＜</button>
+                      )}
                     </td>
                     {/* 予約5 */}
                     <td className="border border-gray-300 px-2 py-1 text-center">
-                      <div className="text-blue-600">{cast.next5}</div>
+                      {cast.next5 && (
+                        <div className="flex items-center justify-center gap-2">
+                          <div className="text-black">{cast.next5.split(' ')[1] || cast.next5}</div>
+                          <div className="text-red-600">{cast.next5.split(' ')[0] || ''}</div>
+                        </div>
+                      )}
                     </td>
-                    {/* 出席記録書 */}
-                    <td className="border border-gray-300 px-2 py-1 text-center">
-                      <div className="text-blue-600">{cast.special}</div>
+                    {/* 予約5ボタン */}
+                    <td className="border border-gray-300 p-0 text-center">
+                      {cast.next5 && (
+                        <button className="w-full h-full bg-green-700 hover:bg-green-800 text-white text-xs border-0 flex items-center justify-center rounded-none">＜</button>
+                      )}
                     </td>
-                    {/* 持込配車票 */}
+                    {/* 出席備考 */}
                     <td className="border border-gray-300 px-2 py-1 text-center">
-                      <div className="text-blue-600">{cast.remark}</div>
+                      <div className="text-black">{cast.special}</div>
+                    </td>
+                    {/* 特記事項 */}
+                    <td className="border border-gray-300 px-2 py-1 text-center">
+                      <div className="text-black">{cast.remark}</div>
                     </td>
                     {/* ホステスNG確認 */}
                     <td className="border border-gray-300 px-2 py-1 text-center">

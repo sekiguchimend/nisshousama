@@ -16,15 +16,20 @@
       "static/chunks/main-app.js",
       "static/chunks/app/page.js"
     ],
-    "/customer-vehicle-info/page": [
+    "/rt2-panel/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/customer-vehicle-info/page.js"
+      "static/chunks/app/rt2-panel/page.js"
     ],
-    "/customer-ledger/page": [
+    "/store-ledger/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/customer-ledger/page.js"
+      "static/chunks/app/store-ledger/page.js"
+    ],
+    "/group-ledger/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/group-ledger/page.js"
     ],
     "/dispatch-panel-2d/page": [
       "static/chunks/webpack.js",
@@ -35,11 +40,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/employee-schedule/page.js"
-    ],
-    "/rt2-panel/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/rt2-panel/page.js"
     ]
   }
 }
