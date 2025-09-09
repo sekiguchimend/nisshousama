@@ -1,4 +1,4 @@
-import { TodayCastData } from '@/types/cast';
+import type { TodayCastData } from '@/types';
 
 // サンプルデータ
 export const sampleCastData: TodayCastData[] = [

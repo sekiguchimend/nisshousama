@@ -18,3 +18,15 @@ export interface ErrorResponse {
   message: string;
   details?: unknown;
 }
+
+// 各カテゴリーの型定義をエクスポート
+export * from './accounting';
+export * from './customer';
+export * from './hostess';
+export * from './employee';
+export * from './dispatch-extended';
+export * from './reports';
+export * from './management';
+export * from './vehicle';
+export * from './cast';
+export * from './dispatch';

@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
-import { HostessSchedule, StaffSchedule, DispatchData, DriverData, InDriverPendingReservation, HostessDelivery } from '@/types/dispatch';
+import type { HostessSchedule, StaffSchedule, DispatchData, DriverData, InDriverPendingReservation, HostessDelivery } from '@/types';
 import { sampleHostesses, sampleStaff, sampleDispatch, sampleDrivers } from '@/data/dispatchSampleData';
 
 const StatusIndicator = ({ status }: { status: string }) => {

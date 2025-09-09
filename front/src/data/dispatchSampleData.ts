@@ -1,4 +1,4 @@
-import { HostessSchedule, StaffSchedule, DispatchData, DriverData } from '@/types/dispatch';
+import type { HostessSchedule, StaffSchedule, DispatchData, DriverData } from '@/types';
 
 // サンプルホステスデータ
 export const sampleHostesses: HostessSchedule[] = [

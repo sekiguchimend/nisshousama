@@ -79,3 +79,4 @@ export interface SalesSlip {
   receiptIssued: boolean;
   notes?: string;
 }
+

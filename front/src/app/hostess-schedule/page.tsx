@@ -1,25 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ArrowLeft, ChevronLeft, ChevronRight, Calendar, FileText, Menu } from "lucide-react";
-
-// ホステススケジュールデータの型定義
-interface HostessScheduleData {
-  id: string;
-  name: string;
-  type: string;
-  schedules: {
-    [date: string]: {
-      startTime?: string;
-      endTime?: string;
-      status: 'scheduled' | 'confirmed' | 'cancelled';
-      notes?: string;
-    }[];
-  };
-}
+import type { HostessScheduleData } from '@/types/hostess';
 
 // 今週の日付を取得する関数
 const getCurrentWeekDates = (baseDate: Date = new Date()) => {
@@ -44,161 +30,47 @@ const sampleHostesses: HostessScheduleData[] = [
   {
     id: "1",
     name: "しょう",
-    type: "内子系",
+    category: "内子系",
     schedules: {
-      "2025-01-27": [{ startTime: "19:00", endTime: "02:00", status: "confirmed" }],
-      "2025-01-28": [{ startTime: "19:00", endTime: "02:00", status: "confirmed" }]
-    }
+      "2025-01-27": [{ startTime: "19:00", endTime: "02:00", status: "confirmed", workType: "normal" }],
+      "2025-01-28": [{ startTime: "19:00", endTime: "02:00", status: "confirmed", workType: "normal" }]
+    },
+    weeklyStats: { totalHours: 14, totalDays: 2, earnings: 70000 }
   },
   {
     id: "2", 
-    name: "しょう",
-    type: "内子系",
+    name: "美咲",
+    category: "内子系",
     schedules: {
-      "2025-01-27": [{ startTime: "19:00", endTime: "02:00", status: "confirmed" }]
-    }
+      "2025-01-27": [{ startTime: "19:00", endTime: "02:00", status: "confirmed", workType: "normal" }]
+    },
+    weeklyStats: { totalHours: 7, totalDays: 1, earnings: 35000 }
   },
   {
     id: "3",
-    name: "きょう目出勤クリア",
-    type: "内子系",
-    schedules: {}
+    name: "さくら",
+    category: "内子系",
+    schedules: {},
+    weeklyStats: { totalHours: 0, totalDays: 0, earnings: 0 }
   },
   {
     id: "4",
-    name: "きょう目出勤クリア", 
-    type: "内子系",
-    schedules: {}
+    name: "新人A",
+    category: "内子系",
+    schedules: {
+      "2025-01-28": [{ startTime: "21:00", endTime: "03:00", status: "scheduled", workType: "normal" }],
+      "2025-01-29": [{ startTime: "21:00", endTime: "03:00", status: "scheduled", workType: "normal" }]
+    },
+    weeklyStats: { totalHours: 12, totalDays: 2, earnings: 48000 }
   },
   {
     id: "5",
-    name: "新人",
-    type: "内子系",
+    name: "新人B",
+    category: "内妻系",
     schedules: {
-      "2025-01-28": [{ startTime: "21:00", endTime: "03:00", status: "scheduled" }],
-      "2025-01-29": [{ startTime: "21:00", endTime: "03:00", status: "scheduled" }]
-    }
-  },
-  {
-    id: "6",
-    name: "新人",
-    type: "内子系", 
-    schedules: {
-      "2025-01-29": [{ startTime: "21:00", endTime: "03:00", status: "scheduled" }]
-    }
-  },
-  {
-    id: "7",
-    name: "新人",
-    type: "内子系",
-    schedules: {
-      "2025-01-27": [{ startTime: "15:00", endTime: "21:00", status: "confirmed" }],
-      "2025-01-28": [{ startTime: "16:00", endTime: "21:00", status: "confirmed" }]
-    }
-  },
-  {
-    id: "8",
-    name: "新人",
-    type: "内子系",
-    schedules: {
-      "2025-01-28": [{ startTime: "15:00", endTime: "21:00", status: "confirmed" }]
-    }
-  },
-  {
-    id: "9",
-    name: "エりりカ(ママ)",
-    type: "内子系",
-    schedules: {}
-  },
-  {
-    id: "10",
-    name: "エりりカ(ママ)",
-    type: "内子系", 
-    schedules: {}
-  },
-  {
-    id: "11",
-    name: "新人",
-    type: "内妻系",
-    schedules: {
-      "2025-01-27": [{ startTime: "15:00", endTime: "24:00", status: "confirmed" }]
-    }
-  },
-  {
-    id: "12",
-    name: "新人",
-    type: "内妻系",
-    schedules: {
-      "2025-01-27": [{ startTime: "13:00", endTime: "20:00", status: "confirmed" }]
-    }
-  },
-  {
-    id: "13",
-    name: "きょう目出勤あき",
-    type: "内妻系",
-    schedules: {}
-  },
-  {
-    id: "14",
-    name: "きょう目出勤あき",
-    type: "内妻系",
-    schedules: {}
-  },
-  {
-    id: "15",
-    name: "新人",
-    type: "内妻系",
-    schedules: {
-      "2025-01-27": [{ startTime: "11:00", endTime: "15:00", status: "confirmed" }, { startTime: "13:00", endTime: "20:00", status: "confirmed" }],
-      "2025-01-28": [{ startTime: "11:00", endTime: "15:00", status: "confirmed" }, { startTime: "13:00", endTime: "20:00", status: "confirmed" }]
-    }
-  },
-  {
-    id: "16",
-    name: "新人",
-    type: "内妻系",
-    schedules: {
-      "2025-01-28": [{ startTime: "13:00", endTime: "20:00", status: "confirmed" }]
-    }
-  },
-  {
-    id: "17",
-    name: "きょう目出勤あき",
-    type: "内妻系",
-    schedules: {}
-  },
-  {
-    id: "18",
-    name: "新人",
-    type: "内妻系",
-    schedules: {
-      "2025-01-27": [{ startTime: "15:00", endTime: "24:00", status: "confirmed" }]
-    }
-  },
-  {
-    id: "19",
-    name: "新人",
-    type: "内妻系",
-    schedules: {
-      "2025-01-28": [{ startTime: "11:00", endTime: "15:00", status: "confirmed" }]
-    }
-  },
-  {
-    id: "20",
-    name: "藍莉",
-    type: "内妻系",
-    schedules: {
-      "2025-01-29": [{ startTime: "22:00", endTime: "03:00", status: "scheduled" }],
-      "2025-01-30": [{ startTime: "22:00", endTime: "03:00", status: "scheduled" }]
-    }
-  },
-  {
-    id: "21",
-    name: "藍莉",
-    type: "内妻系",
-    schedules: {
-      "2025-01-30": [{ startTime: "22:00", endTime: "03:00", status: "scheduled" }]
-    }
+      "2025-01-27": [{ startTime: "15:00", endTime: "24:00", status: "confirmed", workType: "normal" }]
+    },
+    weeklyStats: { totalHours: 9, totalDays: 1, earnings: 36000 }
   }
 ];
 
@@ -350,16 +222,16 @@ export default function HostessSchedule() {
                       </td>
                       <td className="border border-gray-300 px-2 py-2 text-center sticky left-24 bg-white">
                         <span className={`px-2 py-1 rounded text-xs ${
-                          hostess.type === '内子系' ? 'bg-blue-100 text-blue-800' : 'bg-pink-100 text-pink-800'
-                        }`}>
-                          {hostess.type}
+          hostess.category === '内子系' ? 'bg-blue-100 text-blue-800' : 'bg-pink-100 text-pink-800'
+        }`}>
+          {hostess.category}
                         </span>
                       </td>
                       <td className="border border-gray-300 px-2 py-2 sticky left-48 bg-white">
                         <div className="font-semibold">{hostess.name}</div>
                       </td>
                       <td className="border border-gray-300 px-2 py-2 text-center">
-                        {hostess.type}
+                        {hostess.category}
                       </td>
                       {weekDates.map((date, dateIndex) => {
                         const dateKey = formatDateKey(date);

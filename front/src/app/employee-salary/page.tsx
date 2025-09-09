@@ -1,9 +1,11 @@
 'use client';
 
+import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ArrowLeft, DollarSign } from "lucide-react";
+import type { EmployeeSalary } from '@/types';
 
 export default function EmployeeSalary() {
   const router = useRouter();

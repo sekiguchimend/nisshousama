@@ -1,9 +1,11 @@
 'use client';
 
+import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ArrowLeft, BarChart3 } from "lucide-react";
+import type { AccountingSummary } from '@/types';
 
 export default function AccountingSummary() {
   const router = useRouter();
