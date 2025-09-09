@@ -95,6 +95,70 @@ export interface EmployeeSchedule {
   actualBreakTime?: number; // 実際の休憩時間
 }
 
+// シフトタイプの定義
+export type ShiftType = 'morning' | 'day' | 'evening' | 'night' | 'early' | 'late' | 'holiday' | 'off';
+
+// 1日のシフトデータ
+export interface DailyShift {
+  isWorkDay: boolean; // 勤務日かどうか
+  shiftType: ShiftType; // シフトタイプ
+  startTime?: string; // 開始時間（例: "09:00"）
+  endTime?: string; // 終了時間（例: "18:00"）
+  breakTime: number; // 休憩時間（分）
+  workHours: number; // 実働時間
+  location: string; // 勤務場所
+  notes?: string; // 備考
+}
+
+// 従業員週間シフトデータ
+export interface EmployeeWeeklyShift {
+  id: string;
+  employeeId: string;
+  employeeNumber: string;
+  name: string;
+  position: string;
+  department: string;
+
+  // 1週間分のシフトデータ
+  weeklySchedule: {
+    monday: DailyShift;
+    tuesday: DailyShift;
+    wednesday: DailyShift;
+    thursday: DailyShift;
+    friday: DailyShift;
+    saturday: DailyShift;
+    sunday: DailyShift;
+  };
+
+  // 週間統計
+  weeklyStats: {
+    totalWorkDays: number; // 総勤務日数
+    totalWorkHours: number; // 総勤務時間
+    totalBreakTime: number; // 総休憩時間
+    regularHours: number; // 通常勤務時間
+    overtimeHours: number; // 残業時間
+    nightHours: number; // 深夜勤務時間
+    holidayHours: number; // 休日勤務時間
+  };
+
+  // メタデータ
+  weekStartDate: string; // 週開始日（YYYY-MM-DD）
+  weekEndDate: string; // 週終了日（YYYY-MM-DD）
+  lastUpdated: string; // 最終更新日時
+}
+
+// シフトタイプの設定
+export const shiftTypeSettings = {
+  morning: { label: '早出', color: 'bg-green-200', textColor: 'text-green-800' },
+  day: { label: '日勤', color: 'bg-blue-200', textColor: 'text-blue-800' },
+  evening: { label: '夕勤', color: 'bg-yellow-200', textColor: 'text-yellow-800' },
+  night: { label: '夜勤', color: 'bg-purple-200', textColor: 'text-purple-800' },
+  early: { label: '早番', color: 'bg-teal-200', textColor: 'text-teal-800' },
+  late: { label: '遅番', color: 'bg-orange-200', textColor: 'text-orange-800' },
+  holiday: { label: '休日出勤', color: 'bg-red-200', textColor: 'text-red-800' },
+  off: { label: '休み', color: 'bg-gray-200', textColor: 'text-gray-800' }
+};
+
 // スタッフ台帳データ
 export interface StaffLedger {
   id: string;

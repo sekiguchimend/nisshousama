@@ -4,8 +4,10 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { ArrowLeft, ChevronLeft, ChevronRight, Calendar, FileText, Menu } from "lucide-react";
-import type { HostessScheduleData } from '@/types/hostess';
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ArrowLeft, ChevronLeft, ChevronRight, Plus, Edit, Save, X } from "lucide-react";
+import type { HostessScheduleData, WorkType, DailyWorkSchedule } from '@/types/hostess';
 
 // 今週の日付を取得する関数
 const getCurrentWeekDates = (baseDate: Date = new Date()) => {
@@ -25,59 +27,83 @@ const getCurrentWeekDates = (baseDate: Date = new Date()) => {
   return dates;
 };
 
-// サンプルホステスデータ
-const sampleHostesses: HostessScheduleData[] = [
+// 空の日次スケジュールを作成
+const createEmptyDailySchedule = (): DailyWorkSchedule => ({
+  isWorkDay: false,
+  startTime: '',
+  endTime: '',
+  breakTime: 0,
+  workHours: 0,
+  notes: ''
+});
+
+// サンプルホステススケジュールデータ
+const sampleHostessSchedules: HostessScheduleData[] = [
   {
     id: "1",
-    name: "しょう",
-    category: "内子系",
-    schedules: {
-      "2025-01-27": [{ startTime: "19:00", endTime: "02:00", status: "confirmed", workType: "normal" }],
-      "2025-01-28": [{ startTime: "19:00", endTime: "02:00", status: "confirmed", workType: "normal" }]
+    hostessId: "H001",
+    workType: "full_time",
+    name: "田中美咲",
+    assignedStaff: "佐藤",
+    hostessManager: "山田HM",
+    weeklySchedule: {
+      monday: { isWorkDay: true, startTime: "19:00", endTime: "02:00", breakTime: 60, workHours: 6, notes: "" },
+      tuesday: { isWorkDay: false, startTime: "", endTime: "", breakTime: 0, workHours: 0, notes: "休み" },
+      wednesday: { isWorkDay: true, startTime: "19:00", endTime: "02:00", breakTime: 60, workHours: 6, notes: "" },
+      thursday: { isWorkDay: true, startTime: "19:00", endTime: "02:00", breakTime: 60, workHours: 6, notes: "" },
+      friday: { isWorkDay: true, startTime: "19:00", endTime: "03:00", breakTime: 60, workHours: 7, notes: "" },
+      saturday: { isWorkDay: true, startTime: "19:00", endTime: "03:00", breakTime: 60, workHours: 7, notes: "" },
+      sunday: { isWorkDay: false, startTime: "", endTime: "", breakTime: 0, workHours: 0, notes: "休み" }
     },
-    weeklyStats: { totalHours: 14, totalDays: 2, earnings: 70000 }
+    weeklyStats: {
+      totalWorkDays: 5,
+      totalWorkHours: 32,
+      averageDailyHours: 6.4,
+      expectedEarnings: 160000
+    },
+    weekStartDate: "2025-01-27",
+    weekEndDate: "2025-02-02",
+    lastUpdated: "2025-01-26T10:00:00Z",
+    status: "confirmed"
   },
   {
-    id: "2", 
-    name: "美咲",
-    category: "内子系",
-    schedules: {
-      "2025-01-27": [{ startTime: "19:00", endTime: "02:00", status: "confirmed", workType: "normal" }]
+    id: "2",
+    hostessId: "H002",
+    workType: "part_time",
+    name: "鈴木さくら",
+    assignedStaff: "高橋",
+    hostessManager: "田中HM",
+    weeklySchedule: {
+      monday: createEmptyDailySchedule(),
+      tuesday: { isWorkDay: true, startTime: "20:00", endTime: "01:00", breakTime: 30, workHours: 4.5, notes: "" },
+      wednesday: createEmptyDailySchedule(),
+      thursday: { isWorkDay: true, startTime: "20:00", endTime: "01:00", breakTime: 30, workHours: 4.5, notes: "" },
+      friday: { isWorkDay: true, startTime: "20:00", endTime: "02:00", breakTime: 30, workHours: 5.5, notes: "" },
+      saturday: { isWorkDay: true, startTime: "19:00", endTime: "02:00", breakTime: 60, workHours: 6, notes: "" },
+      sunday: createEmptyDailySchedule()
     },
-    weeklyStats: { totalHours: 7, totalDays: 1, earnings: 35000 }
-  },
-  {
-    id: "3",
-    name: "さくら",
-    category: "内子系",
-    schedules: {},
-    weeklyStats: { totalHours: 0, totalDays: 0, earnings: 0 }
-  },
-  {
-    id: "4",
-    name: "新人A",
-    category: "内子系",
-    schedules: {
-      "2025-01-28": [{ startTime: "21:00", endTime: "03:00", status: "scheduled", workType: "normal" }],
-      "2025-01-29": [{ startTime: "21:00", endTime: "03:00", status: "scheduled", workType: "normal" }]
+    weeklyStats: {
+      totalWorkDays: 4,
+      totalWorkHours: 20.5,
+      averageDailyHours: 5.1,
+      expectedEarnings: 102500
     },
-    weeklyStats: { totalHours: 12, totalDays: 2, earnings: 48000 }
-  },
-  {
-    id: "5",
-    name: "新人B",
-    category: "内妻系",
-    schedules: {
-      "2025-01-27": [{ startTime: "15:00", endTime: "24:00", status: "confirmed", workType: "normal" }]
-    },
-    weeklyStats: { totalHours: 9, totalDays: 1, earnings: 36000 }
+    weekStartDate: "2025-01-27",
+    weekEndDate: "2025-02-02",
+    lastUpdated: "2025-01-26T10:00:00Z",
+    status: "draft"
   }
 ];
+
+const dayNames = ['月', '火', '水', '木', '金', '土', '日'];
+const dayKeys: (keyof HostessScheduleData['weeklySchedule'])[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
 export default function HostessSchedule() {
   const router = useRouter();
   const [currentWeekStart, setCurrentWeekStart] = useState(new Date());
   const [weekDates, setWeekDates] = useState<Date[]>([]);
+  const [schedules, setSchedules] = useState<HostessScheduleData[]>(sampleHostessSchedules);
+  const [editingCell, setEditingCell] = useState<{ scheduleId: string; day: keyof HostessScheduleData['weeklySchedule'] } | null>(null);
 
   useEffect(() => {
     setWeekDates(getCurrentWeekDates(currentWeekStart));
@@ -95,25 +121,87 @@ export default function HostessSchedule() {
     return `${month}/${day}`;
   };
 
-  const formatDateKey = (date: Date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
+  const getWorkTypeLabel = (workType: WorkType) => {
+    const labels: Record<WorkType, string> = {
+      'full_time': '正社員',
+      'part_time': 'パート',
+      'contract': '契約',
+      'dispatch': '派遣',
+      'temp': '臨時'
+    };
+    return labels[workType];
   };
 
-  const getDayName = (date: Date) => {
-    const days = ['日', '月', '火', '水', '木', '金', '土'];
-    return days[date.getDay()];
-  };
-
-  const getScheduleColor = (status: string) => {
+  const getStatusColor = (status: HostessScheduleData['status']) => {
     switch (status) {
-      case 'confirmed': return 'bg-blue-200 border-blue-400';
-      case 'scheduled': return 'bg-yellow-200 border-yellow-400';
-      case 'cancelled': return 'bg-red-200 border-red-400';
-      default: return 'bg-gray-200 border-gray-400';
+      case 'confirmed': return 'bg-blue-100 text-blue-800';
+      case 'published': return 'bg-green-100 text-green-800';
+      case 'draft': return 'bg-yellow-100 text-yellow-800';
+      default: return 'bg-gray-100 text-gray-800';
     }
+  };
+
+  const updateScheduleCell = (scheduleId: string, day: keyof HostessScheduleData['weeklySchedule'], updates: Partial<DailyWorkSchedule>) => {
+    setSchedules(prev => prev.map(schedule => {
+      if (schedule.id === scheduleId) {
+        const updatedSchedule = {
+          ...schedule,
+          weeklySchedule: {
+            ...schedule.weeklySchedule,
+            [day]: {
+              ...schedule.weeklySchedule[day],
+              ...updates
+            }
+          }
+        };
+        
+        // 週間統計を再計算
+        const totalWorkDays = Object.values(updatedSchedule.weeklySchedule).filter(d => d.isWorkDay).length;
+        const totalWorkHours = Object.values(updatedSchedule.weeklySchedule).reduce((sum, d) => sum + (d.workHours || 0), 0);
+        
+        updatedSchedule.weeklyStats = {
+          totalWorkDays,
+          totalWorkHours,
+          averageDailyHours: totalWorkDays > 0 ? totalWorkHours / totalWorkDays : 0,
+          expectedEarnings: totalWorkHours * 5000 // 仮の時給計算
+        };
+        
+        return updatedSchedule;
+      }
+      return schedule;
+    }));
+  };
+
+  const addNewSchedule = () => {
+    const newSchedule: HostessScheduleData = {
+      id: Date.now().toString(),
+      hostessId: `H${String(schedules.length + 1).padStart(3, '0')}`,
+      workType: "part_time",
+      name: "",
+      assignedStaff: "",
+      hostessManager: "",
+      weeklySchedule: {
+        monday: createEmptyDailySchedule(),
+        tuesday: createEmptyDailySchedule(),
+        wednesday: createEmptyDailySchedule(),
+        thursday: createEmptyDailySchedule(),
+        friday: createEmptyDailySchedule(),
+        saturday: createEmptyDailySchedule(),
+        sunday: createEmptyDailySchedule()
+      },
+      weeklyStats: {
+        totalWorkDays: 0,
+        totalWorkHours: 0,
+        averageDailyHours: 0,
+        expectedEarnings: 0
+      },
+      weekStartDate: "2025-01-27",
+      weekEndDate: "2025-02-02",
+      lastUpdated: new Date().toISOString(),
+      status: "draft"
+    };
+    
+    setSchedules(prev => [...prev, newSchedule]);
   };
 
   return (
@@ -135,35 +223,23 @@ export default function HostessSchedule() {
         <Card>
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <h1 className="text-xl font-bold">点呼業務管理</h1>
+              <h1 className="text-xl font-bold">ホステススケジュール管理</h1>
               
               <div className="flex items-center gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={addNewSchedule}
+                  className="bg-green-100 hover:bg-green-200"
+                >
+                  <Plus className="w-4 h-4 mr-1" />
+                  新規追加
+                </Button>
+                <Button variant="outline" size="sm" className="bg-blue-100">
+                  一括保存
+                </Button>
                 <Button variant="outline" size="sm" className="bg-purple-100">
-                  今週
-                </Button>
-                <Button variant="outline" size="sm" className="bg-blue-100">
-                  前週
-                </Button>
-                <Button variant="outline" size="sm" className="bg-green-100">
-                  来週
-                </Button>
-                <Button variant="outline" size="sm" className="bg-yellow-100">
-                  週間シート
-                </Button>
-                <div className="text-sm bg-gray-100 px-3 py-1 rounded">
-                  ■営業人員シフト日付出勤
-                </div>
-                <Button variant="outline" size="sm">
-                  クリア
-                </Button>
-                <Button variant="outline" size="sm" className="bg-blue-100">
-                  担当者簡易印刷
-                </Button>
-                <Button variant="outline" size="sm">
                   印刷
-                </Button>
-                <Button variant="outline" size="sm">
-                  MENU
                 </Button>
               </div>
             </div>
@@ -201,62 +277,138 @@ export default function HostessSchedule() {
               <table className="w-full text-xs border-collapse">
                 <thead>
                   <tr className="bg-gray-200">
-                    <th className="border border-gray-300 px-2 py-2 w-24 sticky left-0 bg-gray-200">番号時間</th>
-                    <th className="border border-gray-300 px-2 py-2 w-24 sticky left-24 bg-gray-200">区分</th>
-                    <th className="border border-gray-300 px-2 py-2 w-32 sticky left-48 bg-gray-200">姓名</th>
-                    <th className="border border-gray-300 px-2 py-2 w-12">HM</th>
-                    {weekDates.map((date, index) => (
+                    <th className="border border-gray-300 px-2 py-2 w-20 sticky left-0 bg-gray-200">No</th>
+                    <th className="border border-gray-300 px-2 py-2 w-20 sticky left-20 bg-gray-200">勤務形態</th>
+                    <th className="border border-gray-300 px-2 py-2 w-24 sticky left-40 bg-gray-200">名前</th>
+                    <th className="border border-gray-300 px-2 py-2 w-20 sticky left-64 bg-gray-200">担当者</th>
+                    <th className="border border-gray-300 px-2 py-2 w-20 sticky left-84 bg-gray-200">HM</th>
+                    {dayNames.map((dayName, index) => (
                       <th key={index} className="border border-gray-300 px-2 py-2 w-32">
                         <div className="text-center">
-                          <div>{formatDate(date)} {getDayName(date)}</div>
+                          <div>{weekDates[index] && formatDate(weekDates[index])} {dayName}</div>
+                          <div className="text-xs text-gray-500">時間 / 備考</div>
                         </div>
                       </th>
                     ))}
+                    <th className="border border-gray-300 px-2 py-2 w-24">週間統計</th>
+                    <th className="border border-gray-300 px-2 py-2 w-20">ステータス</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {sampleHostesses.map((hostess, index) => (
-                    <tr key={hostess.id} className="hover:bg-gray-50">
+                  {schedules.map((schedule, index) => (
+                    <tr key={schedule.id} className="hover:bg-gray-50">
                       <td className="border border-gray-300 px-2 py-2 text-center sticky left-0 bg-white">
                         {index + 1}
                       </td>
-                      <td className="border border-gray-300 px-2 py-2 text-center sticky left-24 bg-white">
-                        <span className={`px-2 py-1 rounded text-xs ${
-          hostess.category === '内子系' ? 'bg-blue-100 text-blue-800' : 'bg-pink-100 text-pink-800'
-        }`}>
-          {hostess.category}
-                        </span>
+                      <td className="border border-gray-300 px-2 py-2 sticky left-20 bg-white">
+                        <Select value={schedule.workType}>
+                          <SelectTrigger className="border-0 p-0 h-auto text-xs">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="full_time">正社員</SelectItem>
+                            <SelectItem value="part_time">パート</SelectItem>
+                            <SelectItem value="contract">契約</SelectItem>
+                            <SelectItem value="dispatch">派遣</SelectItem>
+                            <SelectItem value="temp">臨時</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </td>
-                      <td className="border border-gray-300 px-2 py-2 sticky left-48 bg-white">
-                        <div className="font-semibold">{hostess.name}</div>
+                      <td className="border border-gray-300 px-2 py-2 sticky left-40 bg-white">
+                        <Input 
+                          value={schedule.name}
+                          className="border-0 p-0 h-auto text-xs"
+                          placeholder="名前"
+                        />
                       </td>
-                      <td className="border border-gray-300 px-2 py-2 text-center">
-                        {hostess.category}
+                      <td className="border border-gray-300 px-2 py-2 sticky left-64 bg-white">
+                        <Input 
+                          value={schedule.assignedStaff}
+                          className="border-0 p-0 h-auto text-xs"
+                          placeholder="担当者"
+                        />
                       </td>
-                      {weekDates.map((date, dateIndex) => {
-                        const dateKey = formatDateKey(date);
-                        const daySchedules = hostess.schedules[dateKey] || [];
+                      <td className="border border-gray-300 px-2 py-2 sticky left-84 bg-white">
+                        <Input 
+                          value={schedule.hostessManager}
+                          className="border-0 p-0 h-auto text-xs"
+                          placeholder="HM"
+                        />
+                      </td>
+                      {dayKeys.map((dayKey, dayIndex) => {
+                        const daySchedule = schedule.weeklySchedule[dayKey];
+                        const isEditing = editingCell?.scheduleId === schedule.id && editingCell?.day === dayKey;
                         
                         return (
-                          <td key={dateIndex} className="border border-gray-300 px-1 py-1">
-                            <div className="space-y-1">
-                              {daySchedules.map((schedule, scheduleIndex) => (
-                                <div 
-                                  key={scheduleIndex}
-                                  className={`text-xs p-1 rounded border ${getScheduleColor(schedule.status)}`}
-                                >
-                                  <div className="font-semibold">
-                                    {schedule.startTime}-{schedule.endTime}
+                          <td key={dayIndex} className="border border-gray-300 px-1 py-1">
+                            {daySchedule.isWorkDay ? (
+                              <div className="space-y-1">
+                                <div className="bg-blue-50 p-1 rounded text-center">
+                                  <div className="font-semibold text-blue-800">
+                                    {daySchedule.startTime} - {daySchedule.endTime}
                                   </div>
-                                  {schedule.notes && (
-                                    <div className="text-gray-600">{schedule.notes}</div>
+                                  <div className="text-xs text-blue-600">
+                                    {daySchedule.workHours}h
+                                  </div>
+                                  {daySchedule.notes && (
+                                    <div className="text-xs text-gray-600 mt-1">
+                                      {daySchedule.notes}
+                                    </div>
                                   )}
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    className="h-4 w-4 p-0 mt-1"
+                                    onClick={() => setEditingCell({ scheduleId: schedule.id, day: dayKey })}
+                                  >
+                                    <Edit className="w-3 h-3" />
+                                  </Button>
                                 </div>
-                              ))}
-                            </div>
+                              </div>
+                            ) : (
+                              <div className="text-center">
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  className="h-6 w-full text-xs"
+                                  onClick={() => {
+                                    updateScheduleCell(schedule.id, dayKey, {
+                                      isWorkDay: true,
+                                      startTime: "19:00",
+                                      endTime: "02:00",
+                                      workHours: 6
+                                    });
+                                  }}
+                                >
+                                  + 追加
+                                </Button>
+                                {daySchedule.notes && (
+                                  <div className="text-xs text-gray-500 mt-1">
+                                    {daySchedule.notes}
+                                  </div>
+                                )}
+                              </div>
+                            )}
                           </td>
                         );
                       })}
+                      <td className="border border-gray-300 px-2 py-2 text-center">
+                        <div className="space-y-1">
+                          <div className="text-xs">
+                            <div>勤務日: {schedule.weeklyStats.totalWorkDays}日</div>
+                            <div>時間: {schedule.weeklyStats.totalWorkHours}h</div>
+                            <div>平均: {schedule.weeklyStats.averageDailyHours.toFixed(1)}h/日</div>
+                            <div className="text-green-600 font-semibold">
+                              ¥{schedule.weeklyStats.expectedEarnings.toLocaleString()}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="border border-gray-300 px-2 py-2 text-center">
+                        <span className={`px-2 py-1 rounded text-xs ${getStatusColor(schedule.status)}`}>
+                          {schedule.status === 'confirmed' ? '確定' : schedule.status === 'published' ? '公開' : '下書き'}
+                        </span>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -270,16 +422,16 @@ export default function HostessSchedule() {
       <div className="p-4 mt-4">
         <div className="flex items-center gap-4 text-xs text-gray-600">
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-blue-200 border border-blue-400 rounded"></div>
+            <div className="w-4 h-4 bg-blue-100 border border-blue-300 rounded"></div>
+            <span>勤務予定</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-gray-100 border border-gray-300 rounded"></div>
+            <span>休み</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-green-100 border border-green-300 rounded"></div>
             <span>確定済み</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-yellow-200 border border-yellow-400 rounded"></div>
-            <span>予定</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-red-200 border border-red-400 rounded"></div>
-            <span>キャンセル</span>
           </div>
         </div>
       </div>

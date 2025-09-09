@@ -80,27 +80,68 @@ export interface HostessManager {
   notes?: string; // 備考
 }
 
-// ホステススケジュールデータ（既存の型を拡張）
+// 勤務形態の型定義
+export type WorkType = 'full_time' | 'part_time' | 'contract' | 'dispatch' | 'temp';
+
+// 曜日の型定義
+export type DayOfWeek = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday' | 'sunday';
+
+// 1日の勤務時間データ
+export interface DailyWorkSchedule {
+  isWorkDay: boolean; // 勤務日かどうか
+  startTime?: string; // 開始時間（例: "18:00"）
+  endTime?: string; // 終了時間（例: "02:00"）
+  breakTime?: number; // 休憩時間（分）
+  workHours?: number; // 実働時間
+  notes?: string; // 備考
+}
+
+// 新しいホステススケジュールデータ
 export interface HostessScheduleData {
   id: string;
-  name: string;
-  category: '内子系' | '内妻系' | 'VIP' | 'Lady' | 'Girls' | 'SUP' | '新人';
-  schedules: {
-    [date: string]: {
-      startTime?: string;
-      endTime?: string;
-      status: 'scheduled' | 'confirmed' | 'cancelled';
-      workType?: 'normal' | 'overtime' | 'holiday';
-      location?: string;
-      notes?: string;
-      managerName?: string;
-    }[];
+  hostessId: string; // ホステスID
+  workType: WorkType; // 勤務形態
+  name: string; // 名前（旧店内名フィールド）
+  assignedStaff: string; // 担当者
+  hostessManager: string; // HM（ホステスマネージャー）
+  
+  // 1週間分の勤務時間
+  weeklySchedule: {
+    monday: DailyWorkSchedule;
+    tuesday: DailyWorkSchedule;
+    wednesday: DailyWorkSchedule;
+    thursday: DailyWorkSchedule;
+    friday: DailyWorkSchedule;
+    saturday: DailyWorkSchedule;
+    sunday: DailyWorkSchedule;
   };
+  
+  // 週間統計
   weeklyStats: {
-    totalHours: number;
-    totalDays: number;
-    earnings: number;
+    totalWorkDays: number; // 総勤務日数
+    totalWorkHours: number; // 総勤務時間
+    averageDailyHours: number; // 1日平均勤務時間
+    expectedEarnings: number; // 予想収入
   };
+  
+  // メタデータ
+  weekStartDate: string; // 週開始日（YYYY-MM-DD）
+  weekEndDate: string; // 週終了日（YYYY-MM-DD）
+  lastUpdated: string; // 最終更新日時
+  status: 'draft' | 'confirmed' | 'published'; // スケジュールステータス
+}
+
+// ホステススケジュール一覧用の型
+export interface HostessScheduleListItem {
+  id: string;
+  hostessId: string;
+  workType: WorkType;
+  name: string;
+  hostessManager: string;
+  totalWorkDays: number;
+  totalWorkHours: number;
+  status: 'draft' | 'confirmed' | 'published';
+  weekStartDate: string;
 }
 
 // 時間別ホステス出勤データ

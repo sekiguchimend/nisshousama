@@ -6,15 +6,16 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowLeft, Search, Plus, FileText, Download, Users } from "lucide-react";
+import { ArrowLeft, Search, Plus, FileText, Download } from "lucide-react";
 import type { InterviewRecord } from '@/types';
 import { interviewTypeLabels, interviewResultLabels, employmentStatusLabels } from '@/types';
-import { interviewSampleData } from '@/data/interviewSampleData';
+import { interviewSampleData, interviewerList, assignedStaffList, mediaList } from '@/data/interviewSampleData';
 
-export default function InterviewList() {
+export default function ViewList() {
   const router = useRouter();
   const [interviews, setInterviews] = useState<InterviewRecord[]>(interviewSampleData);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedInterviews, setSelectedInterviews] = useState<string[]>([]);
 
   const filteredInterviews = interviews.filter(interview =>
     interview.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -32,6 +33,21 @@ export default function InterviewList() {
     return `${year}/${month}/${day}`;
   };
 
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedInterviews(filteredInterviews.map(interview => interview.id));
+    } else {
+      setSelectedInterviews([]);
+    }
+  };
+
+  const handleSelectInterview = (interviewId: string, checked: boolean) => {
+    if (checked) {
+      setSelectedInterviews(prev => [...prev, interviewId]);
+    } else {
+      setSelectedInterviews(prev => prev.filter(id => id !== interviewId));
+    }
+  };
 
   const exportToCSV = () => {
     // CSVエクスポート機能（実装例）
@@ -92,7 +108,7 @@ export default function InterviewList() {
         <Card>
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <h1 className="text-xl font-bold">面接リスト</h1>
+              <h1 className="text-xl font-bold">面接管理リスト</h1>
 
               <div className="flex items-center gap-4">
                 {/* 新規追加ボタン */}
@@ -133,6 +149,12 @@ export default function InterviewList() {
               <table className="w-full text-xs border-collapse">
                 <thead>
                   <tr className="bg-gray-200">
+                    <th className="border border-gray-300 px-2 py-2 w-12">
+                      <Checkbox
+                        checked={selectedInterviews.length === filteredInterviews.length && filteredInterviews.length > 0}
+                        onCheckedChange={handleSelectAll}
+                      />
+                    </th>
                     <th className="border border-gray-300 px-2 py-2 w-16">通し番号</th>
                     <th className="border border-gray-300 px-2 py-2 w-20">日付</th>
                     <th className="border border-gray-300 px-2 py-2 w-16">開始時刻</th>
@@ -153,6 +175,12 @@ export default function InterviewList() {
                 <tbody>
                   {filteredInterviews.map((interview, index) => (
                     <tr key={interview.id} className="hover:bg-gray-50">
+                      <td className="border border-gray-300 px-2 py-2 text-center">
+                        <Checkbox
+                          checked={selectedInterviews.includes(interview.id)}
+                          onCheckedChange={(checked) => handleSelectInterview(interview.id, checked as boolean)}
+                        />
+                      </td>
                       <td className="border border-gray-300 px-2 py-2 text-center font-semibold">
                         {index + 1}
                       </td>
@@ -172,11 +200,11 @@ export default function InterviewList() {
                         </span>
                       </td>
                       <td className="border border-gray-300 px-2 py-2 text-center">
-                        <Checkbox
-                          checked={interview.isRemoteWork}
-                          className="w-4 h-4"
-                          disabled
-                        />
+                        {interview.isRemoteWork && (
+                          <span className="inline-flex items-center justify-center w-5 h-5 bg-orange-100 text-orange-800 rounded text-xs font-semibold">
+                            ○
+                          </span>
+                        )}
                       </td>
                       <td className="border border-gray-300 px-2 py-2 font-semibold">
                         {interview.name}

@@ -1,6 +1,6 @@
 // 従業員関連のサンプルデータ
 
-import { EmployeeSalary, PartTimeSalary, EmployeeSchedule, StaffLedger } from '@/types/employee';
+import { EmployeeSalary, PartTimeSalary, EmployeeSchedule, StaffLedger, EmployeeWeeklyShift, DailyShift } from '@/types/employee';
 
 // 従業員給与サンプルデータ
 export const sampleEmployeeSalaries: EmployeeSalary[] = [
@@ -313,6 +313,263 @@ export const sampleStaffLedger: StaffLedger[] = [
     },
     status: "active",
     notes: "安全運転、顧客評価良好"
+  }
+];
+
+// 空の日次シフトを作成
+const createEmptyDailyShift = (): DailyShift => ({
+  isWorkDay: false,
+  shiftType: 'off',
+  breakTime: 0,
+  workHours: 0,
+  location: '',
+  notes: ''
+});
+
+// 従業員週間シフトサンプルデータ
+export const sampleEmployeeWeeklyShifts: EmployeeWeeklyShift[] = [
+  {
+    id: "weekly_shift_001",
+    employeeId: "emp001",
+    employeeNumber: "E-001",
+    name: "田中一郎",
+    position: "運行管理部長",
+    department: "運行管理部",
+    weeklySchedule: {
+      monday: {
+        isWorkDay: true,
+        shiftType: 'day',
+        startTime: "09:00",
+        endTime: "18:00",
+        breakTime: 60,
+        workHours: 8,
+        location: "本社",
+        notes: ""
+      },
+      tuesday: {
+        isWorkDay: true,
+        shiftType: 'day',
+        startTime: "09:00",
+        endTime: "18:00",
+        breakTime: 60,
+        workHours: 8,
+        location: "本社",
+        notes: ""
+      },
+      wednesday: {
+        isWorkDay: true,
+        shiftType: 'day',
+        startTime: "09:00",
+        endTime: "18:00",
+        breakTime: 60,
+        workHours: 8,
+        location: "本社",
+        notes: ""
+      },
+      thursday: {
+        isWorkDay: true,
+        shiftType: 'day',
+        startTime: "09:00",
+        endTime: "18:00",
+        breakTime: 60,
+        workHours: 8,
+        location: "本社",
+        notes: ""
+      },
+      friday: {
+        isWorkDay: true,
+        shiftType: 'day',
+        startTime: "09:00",
+        endTime: "18:00",
+        breakTime: 60,
+        workHours: 8,
+        location: "本社",
+        notes: ""
+      },
+      saturday: {
+        isWorkDay: false,
+        shiftType: 'off',
+        breakTime: 0,
+        workHours: 0,
+        location: "",
+        notes: "週休日"
+      },
+      sunday: {
+        isWorkDay: false,
+        shiftType: 'off',
+        breakTime: 0,
+        workHours: 0,
+        location: "",
+        notes: "週休日"
+      }
+    },
+    weeklyStats: {
+      totalWorkDays: 5,
+      totalWorkHours: 40,
+      totalBreakTime: 300,
+      regularHours: 40,
+      overtimeHours: 0,
+      nightHours: 0,
+      holidayHours: 0
+    },
+    weekStartDate: "2025-01-27",
+    weekEndDate: "2025-02-02",
+    lastUpdated: "2025-01-25T10:00:00Z"
+  },
+  {
+    id: "weekly_shift_002",
+    employeeId: "emp002",
+    employeeNumber: "E-002",
+    name: "佐藤花子",
+    position: "ドライバー",
+    department: "配車部",
+    weeklySchedule: {
+      monday: {
+        isWorkDay: true,
+        shiftType: 'day',
+        startTime: "08:00",
+        endTime: "17:00",
+        breakTime: 60,
+        workHours: 8,
+        location: "銀座エリア",
+        notes: ""
+      },
+      tuesday: {
+        isWorkDay: true,
+        shiftType: 'night',
+        startTime: "20:00",
+        endTime: "05:00",
+        breakTime: 60,
+        workHours: 8,
+        location: "銀座エリア",
+        notes: "深夜シフト"
+      },
+      wednesday: createEmptyDailyShift(),
+      thursday: {
+        isWorkDay: true,
+        shiftType: 'night',
+        startTime: "20:00",
+        endTime: "05:00",
+        breakTime: 60,
+        workHours: 8,
+        location: "銀座エリア",
+        notes: "深夜シフト"
+      },
+      friday: {
+        isWorkDay: true,
+        shiftType: 'evening',
+        startTime: "16:00",
+        endTime: "01:00",
+        breakTime: 60,
+        workHours: 8,
+        location: "銀座エリア",
+        notes: ""
+      },
+      saturday: {
+        isWorkDay: true,
+        shiftType: 'holiday',
+        startTime: "10:00",
+        endTime: "19:00",
+        breakTime: 60,
+        workHours: 8,
+        location: "銀座エリア",
+        notes: "休日出勤"
+      },
+      sunday: {
+        isWorkDay: false,
+        shiftType: 'off',
+        breakTime: 0,
+        workHours: 0,
+        location: "",
+        notes: "週休日"
+      }
+    },
+    weeklyStats: {
+      totalWorkDays: 5,
+      totalWorkHours: 40,
+      totalBreakTime: 300,
+      regularHours: 24,
+      overtimeHours: 8,
+      nightHours: 16,
+      holidayHours: 8
+    },
+    weekStartDate: "2025-01-27",
+    weekEndDate: "2025-02-02",
+    lastUpdated: "2025-01-25T10:00:00Z"
+  },
+  {
+    id: "weekly_shift_003",
+    employeeId: "emp003",
+    employeeNumber: "P-001",
+    name: "山田次郎",
+    position: "オペレーター",
+    department: "配車部",
+    weeklySchedule: {
+      monday: {
+        isWorkDay: true,
+        shiftType: 'morning',
+        startTime: "06:00",
+        endTime: "15:00",
+        breakTime: 60,
+        workHours: 8,
+        location: "コールセンター",
+        notes: "早朝シフト"
+      },
+      tuesday: {
+        isWorkDay: true,
+        shiftType: 'day',
+        startTime: "14:00",
+        endTime: "22:00",
+        breakTime: 60,
+        workHours: 7,
+        location: "コールセンター",
+        notes: ""
+      },
+      wednesday: createEmptyDailyShift(),
+      thursday: {
+        isWorkDay: true,
+        shiftType: 'day',
+        startTime: "14:00",
+        endTime: "22:00",
+        breakTime: 60,
+        workHours: 7,
+        location: "コールセンター",
+        notes: ""
+      },
+      friday: {
+        isWorkDay: true,
+        shiftType: 'day',
+        startTime: "14:00",
+        endTime: "22:00",
+        breakTime: 60,
+        workHours: 7,
+        location: "コールセンター",
+        notes: ""
+      },
+      saturday: {
+        isWorkDay: true,
+        shiftType: 'day',
+        startTime: "09:00",
+        endTime: "18:00",
+        breakTime: 60,
+        workHours: 8,
+        location: "コールセンター",
+        notes: ""
+      },
+      sunday: createEmptyDailyShift()
+    },
+    weeklyStats: {
+      totalWorkDays: 5,
+      totalWorkHours: 37,
+      totalBreakTime: 300,
+      regularHours: 37,
+      overtimeHours: 0,
+      nightHours: 0,
+      holidayHours: 0
+    },
+    weekStartDate: "2025-01-27",
+    weekEndDate: "2025-02-02",
+    lastUpdated: "2025-01-25T10:00:00Z"
   }
 ];
 
