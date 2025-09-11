@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -16,39 +16,16 @@ import {
   getDurationWidth
 } from '@/data/timeBasedHostessAttendanceSampleData';
 
-export default function TimeBasedHostessAttendance() {
+export default function TimeBaseHostessAttendance() {
   const router = useRouter();
   const [hostesses, setHostesses] = useState<TimeBasedHostessAttendance[]>(timeBasedHostessAttendanceSampleData);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDate, setSelectedDate] = useState('2025-01-27');
-  const [containerWidth, setContainerWidth] = useState(1200);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const filteredHostesses = hostesses.filter(hostess =>
     hostess.hostessName.toLowerCase().includes(searchQuery.toLowerCase()) ||
     hostess.location?.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  // コンテナ幅の取得と更新
-  useEffect(() => {
-    const updateWidth = () => {
-      if (containerRef.current) {
-        const width = containerRef.current.offsetWidth;
-        setContainerWidth(width);
-      }
-    };
-
-    updateWidth();
-    window.addEventListener('resize', updateWidth);
-
-    return () => {
-      window.removeEventListener('resize', updateWidth);
-    };
-  }, []);
-
-  // 幅の計算
-  const leftPanelWidth = 256; // 左側パネルの固定幅
-  const graphWidth = Math.max(400, containerWidth - leftPanelWidth - 32); // 最小幅400px
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -109,52 +86,48 @@ export default function TimeBasedHostessAttendance() {
         <Card>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
-              <div ref={containerRef} className="w-full">
+              <div className="min-w-[1000px]">
                 {/* 時間軸ヘッダー */}
                 <div className="flex bg-gray-200 border-b border-gray-300">
                   {/* 左側: ホステス情報用スペース */}
-                  <div className="border-r border-gray-300" style={{ width: `${leftPanelWidth}px` }}>
+                  <div className="w-64 flex-shrink-0 border-r border-gray-300">
                     <div className="px-4 py-3 font-semibold text-sm">
                       ホステス / ステータス
                     </div>
                   </div>
 
                   {/* 右側: 時間軸 */}
-                  <div className="flex-1 relative" style={{ width: `${graphWidth}px` }}>
+                  <div className="flex-1 relative">
                     <div className="px-4 py-3 font-semibold text-sm text-center">
                       時間軸（{timeSlots[0]}時 ～ 翌{timeSlots[timeSlots.length - 1]}時）
                     </div>
 
                     {/* 時間ラベル */}
-                    <div className="flex relative h-8 border-t border-gray-300" style={{ width: `${graphWidth}px` }}>
-                      {timeSlots.map((hour, index) => {
-                        const slotWidth = index === timeSlots.length - 1 ? 'auto' : `${100 / timeSlots.length}%`;
-                        return (
-                          <div
-                            key={hour}
-                            className="text-center text-xs py-1 border-r border-gray-200 last:border-r-0"
-                            style={{
-                              width: slotWidth,
-                              flex: index === timeSlots.length - 1 ? '1' : 'none'
-                            }}
-                          >
-                            {getTimeLabel(hour)}
-                          </div>
-                        );
-                      })}
+                    <div className="flex relative h-8 border-t border-gray-300">
+                      {timeSlots.map((hour, index) => (
+                        <div
+                          key={hour}
+                          className="flex-1 text-center text-xs py-1 border-r border-gray-200 last:border-r-0"
+                          style={{
+                            width: index === timeSlots.length - 1 ? 'auto' : `${100 / timeSlots.length}%`
+                          }}
+                        >
+                          {getTimeLabel(hour)}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
 
                 {/* ホステス行 */}
                 {filteredHostesses.map((hostess, index) => {
-                  const barLeft = getTimePosition(hostess.startTime, graphWidth);
-                  const barWidth = getDurationWidth(hostess.startTime, hostess.endTime, graphWidth);
+                  const barLeft = getTimePosition(hostess.startTime, 736); // 800px - 64px (左側スペース)
+                  const barWidth = getDurationWidth(hostess.startTime, hostess.endTime, 736);
 
                   return (
                     <div key={hostess.id} className={`flex border-b border-gray-200 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
                       {/* 左側: ホステス情報 */}
-                      <div className="flex-shrink-0 border-r border-gray-300" style={{ width: `${leftPanelWidth}px` }}>
+                      <div className="w-64 flex-shrink-0 border-r border-gray-300">
                         <div className="px-4 py-4">
                           <div className="flex items-center justify-between">
                             <div>
@@ -174,22 +147,18 @@ export default function TimeBasedHostessAttendance() {
                       </div>
 
                       {/* 右側: 時間軸グラフ */}
-                      <div className="relative h-16" style={{ width: `${graphWidth}px` }}>
+                      <div className="flex-1 relative h-16">
                         {/* 時間軸の背景グリッド */}
                         <div className="absolute inset-0 flex">
-                          {timeSlots.map((hour, hourIndex) => {
-                            const slotWidth = hourIndex === timeSlots.length - 1 ? 'auto' : `${100 / timeSlots.length}%`;
-                            return (
-                              <div
-                                key={hour}
-                                className="border-r border-gray-200"
-                                style={{
-                                  width: slotWidth,
-                                  flex: hourIndex === timeSlots.length - 1 ? '1' : 'none'
-                                }}
-                              />
-                            );
-                          })}
+                          {timeSlots.map((hour, hourIndex) => (
+                            <div
+                              key={hour}
+                              className="flex-1 border-r border-gray-200"
+                              style={{
+                                width: hourIndex === timeSlots.length - 1 ? 'auto' : `${100 / timeSlots.length}%`
+                              }}
+                            />
+                          ))}
                         </div>
 
                         {/* 勤務時間バー */}
@@ -281,4 +250,3 @@ export default function TimeBasedHostessAttendance() {
     </div>
   );
 }
-

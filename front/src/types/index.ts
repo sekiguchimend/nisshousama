@@ -160,3 +160,36 @@ export const accessStatusLabels: Record<AccessStatusType, string> = {
   active: '有効',
   inactive: '無効'
 };
+
+// 時間別ホステス出勤管理関連の型定義
+export type HostessAttendanceStatus = 'scheduled' | 'confirmed' | 'working' | 'break' | 'finished';
+
+export interface TimeBasedHostessAttendance {
+  id: string;
+  date: string; // YYYY-MM-DD形式
+  hostessId: string;
+  hostessName: string;
+  startTime: string; // HH:MM形式
+  endTime: string; // HH:MM形式
+  status: HostessAttendanceStatus;
+  location?: string; // 勤務場所
+  notes?: string; // 備考
+}
+
+// ステータスの表示ラベル
+export const hostessAttendanceStatusLabels: Record<HostessAttendanceStatus, string> = {
+  scheduled: '予定',
+  confirmed: '確定',
+  working: '勤務中',
+  break: '休憩中',
+  finished: '終了'
+};
+
+// ステータスの色設定
+export const hostessAttendanceStatusColors: Record<HostessAttendanceStatus, string> = {
+  scheduled: 'bg-yellow-100 text-yellow-800',
+  confirmed: 'bg-blue-100 text-blue-800',
+  working: 'bg-green-100 text-green-800',
+  break: 'bg-orange-100 text-orange-800',
+  finished: 'bg-gray-100 text-gray-800'
+};

@@ -189,57 +189,57 @@ export const sampleHostessManagers: HostessManager[] = [
 export const sampleHostessScheduleData: HostessScheduleData[] = [
   {
     id: "sched001",
+    hostessId: "hostess001",
+    workType: "full_time",
     name: "美咲",
-    category: "VIP",
-    schedules: {
-      "2025-01-27": [
-        {
-          startTime: "19:00",
-          endTime: "02:00",
-          status: "confirmed",
-          workType: "normal",
-          location: "銀座エリア",
-          managerName: "鈴木太郎"
-        }
-      ],
-      "2025-01-28": [
-        {
-          startTime: "19:00",
-          endTime: "02:00",
-          status: "confirmed",
-          workType: "normal",
-          location: "六本木エリア",
-          managerName: "鈴木太郎"
-        }
-      ]
+    assignedStaff: "鈴木太郎",
+    hostessManager: "鈴木太郎",
+    weeklySchedule: {
+      monday: { isWorkDay: true, startTime: "19:00", endTime: "02:00", workHours: 7 },
+      tuesday: { isWorkDay: true, startTime: "19:00", endTime: "02:00", workHours: 7 },
+      wednesday: { isWorkDay: true, startTime: "19:00", endTime: "02:00", workHours: 7 },
+      thursday: { isWorkDay: true, startTime: "19:00", endTime: "02:00", workHours: 7 },
+      friday: { isWorkDay: true, startTime: "19:00", endTime: "02:00", workHours: 7 },
+      saturday: { isWorkDay: false },
+      sunday: { isWorkDay: false }
     },
     weeklyStats: {
-      totalHours: 35,
-      totalDays: 5,
-      earnings: 180000
-    }
+      totalWorkDays: 5,
+      totalWorkHours: 35,
+      averageDailyHours: 7,
+      expectedEarnings: 180000
+    },
+    weekStartDate: "2025-01-27",
+    weekEndDate: "2025-02-02",
+    lastUpdated: "2025-01-26T10:00:00Z",
+    status: "confirmed"
   },
   {
     id: "sched002",
+    hostessId: "hostess002",
+    workType: "full_time",
     name: "さくら",
-    category: "Lady",
-    schedules: {
-      "2025-01-27": [
-        {
-          startTime: "19:00",
-          endTime: "02:00",
-          status: "confirmed",
-          workType: "normal",
-          location: "新宿エリア",
-          managerName: "高橋花子"
-        }
-      ]
+    assignedStaff: "高橋花子",
+    hostessManager: "高橋花子",
+    weeklySchedule: {
+      monday: { isWorkDay: false },
+      tuesday: { isWorkDay: false },
+      wednesday: { isWorkDay: true, startTime: "19:00", endTime: "02:00", workHours: 7 },
+      thursday: { isWorkDay: true, startTime: "19:00", endTime: "02:00", workHours: 7 },
+      friday: { isWorkDay: true, startTime: "19:00", endTime: "02:00", workHours: 7 },
+      saturday: { isWorkDay: true, startTime: "19:00", endTime: "02:00", workHours: 7 },
+      sunday: { isWorkDay: false }
     },
     weeklyStats: {
-      totalHours: 28,
-      totalDays: 4,
-      earnings: 140000
-    }
+      totalWorkDays: 4,
+      totalWorkHours: 28,
+      averageDailyHours: 7,
+      expectedEarnings: 140000
+    },
+    weekStartDate: "2025-01-27",
+    weekEndDate: "2025-02-02",
+    lastUpdated: "2025-01-26T10:00:00Z",
+    status: "confirmed"
   }
 ];
 
