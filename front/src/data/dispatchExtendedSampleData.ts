@@ -1,6 +1,6 @@
 // 配車関連の追加サンプルデータ
 
-import { DispatchPanel2D, RT2Panel, AreaDivision, DispatchAreaTransportFee, Tehai } from '@/types/dispatch-extended';
+import { DispatchPanel2D, RT2Panel, DispatchAreaTransportFee, Tehai } from '@/types/dispatch-extended';
 
 // 配車2Dパネルサンプルデータ
 export const sampleDispatchPanel2D: DispatchPanel2D[] = [
@@ -138,8 +138,8 @@ export const sampleRT2Panel: RT2Panel[] = [
   }
 ];
 
-// エリア区分サンプルデータ
-export const sampleAreaDivisions: AreaDivision[] = [
+// エリア区分サンプルデータ 用途不明のためコメントアウト
+/*export const sampleAreaDivisions: AreaDivision[] = [
   {
     id: "area001",
     areaCode: "A01",
@@ -192,7 +192,7 @@ export const sampleAreaDivisions: AreaDivision[] = [
     isActive: true,
     notes: "夜間需要が高い"
   }
-];
+];*/
 
 // 配車エリア運送料サンプルデータ
 export const sampleDispatchAreaTransportFees: DispatchAreaTransportFee[] = [
