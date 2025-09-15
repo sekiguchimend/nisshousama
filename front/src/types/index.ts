@@ -24,11 +24,23 @@ export * from './accounting';
 export * from './customer';
 export * from './hostess';
 export * from './employee';
-export * from './dispatch-extended';
+export * from './area-division';
+export * from './hotel-division';
+
+// dispatch-extendedの型定義（DispatchAreaTransportFeeの重複を避けるため明示的エクスポート）
+export type {
+  DispatchPanel2D,
+  RT2Panel,
+  DispatchAreaDivision,
+  Tehai
+} from './dispatch-extended';
+
 export * from './reports';
 export * from './management';
 export * from './vehicle';
 export * from './cast';
+
+// dispatchの型定義（DispatchAreaTransportFeeを含む）
 export * from './dispatch';
 
 // 面接管理関連の型定義

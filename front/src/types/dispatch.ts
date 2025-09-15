@@ -62,3 +62,18 @@ export interface HostessDelivery {
   deliveryLocation: string; // 送り場所
   count: number; // 件数
 }
+
+// 派遣地区別交通費データの型定義
+export interface DispatchAreaTransportFee {
+  id: string;
+  no: number; // No
+  postalCodePrefix: string; // 上三桁(郵便番号7桁から先頭3桁)
+  postalCode: string; // 郵便番号7桁
+  prefectureReading: string; // 都道府県読み(半角カタカナ)
+  cityReading: string; // 市区町村読み(半角カタカナ)
+  townReading: string; // 町丁読み(半角カタカナ)
+  prefecture: string; // 都道府県
+  city: string; // 市区町村
+  town: string; // 町丁
+  transportFee: number; // 交通費
+}

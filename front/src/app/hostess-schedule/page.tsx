@@ -315,24 +315,27 @@ export default function HostessSchedule() {
                         </Select>
                       </td>
                       <td className="border border-gray-300 px-2 py-2 sticky left-40 bg-white">
-                        <Input 
+                        <Input
                           value={schedule.name}
                           className="border-0 p-0 h-auto text-xs"
                           placeholder="名前"
+                          readOnly
                         />
                       </td>
                       <td className="border border-gray-300 px-2 py-2 sticky left-64 bg-white">
-                        <Input 
+                        <Input
                           value={schedule.assignedStaff}
                           className="border-0 p-0 h-auto text-xs"
                           placeholder="担当者"
+                          readOnly
                         />
                       </td>
                       <td className="border border-gray-300 px-2 py-2 sticky left-84 bg-white">
-                        <Input 
+                        <Input
                           value={schedule.hostessManager}
                           className="border-0 p-0 h-auto text-xs"
                           placeholder="HM"
+                          readOnly
                         />
                       </td>
                       {dayKeys.map((dayKey, dayIndex) => {

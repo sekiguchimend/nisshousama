@@ -88,8 +88,8 @@ export interface RT2Panel {
   }[];
 }
 
-// エリア区分データ
-export interface AreaDivision {
+// 配車エリア区分データ（ホテル管理とは別）
+export interface DispatchAreaDivision {
   id: string;
   areaCode: string; // エリアコード
   areaName: string; // エリア名
