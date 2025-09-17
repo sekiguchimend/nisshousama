@@ -13,7 +13,8 @@ import {
   TrendingUp,
   Camera,
   Star,
-  Car
+  Car,
+  Building
 } from "lucide-react";
 
 export const LeftPanel = () => {
