@@ -32,7 +32,7 @@ export const LeftPanel = () => {
       "出金伝票": "/expense-slip",
       "売上伝票": "/sales-slip",
       "管理用リスト": "/management-list",
-      "本日の日報": "/daily-report",
+      "日報": "/daily-report",
       "集計・グラフ": "/summary-graph",
       "従業員給与集計": "/employee-salary",
       "会計集計": "/accounting-summary",
@@ -70,7 +70,7 @@ export const LeftPanel = () => {
       title: "C",
       items: [
         { name: "管理用リスト", icon: FileText },
-        { name: "本日の日報", icon: BarChart3 },
+        { name: "日報", icon: BarChart3 },
         { name: "集計・グラフ", icon: TrendingUp },
         { name: "従業員給与集計", icon: DollarSign },
         { name: "会計集計", icon: BarChart3 },

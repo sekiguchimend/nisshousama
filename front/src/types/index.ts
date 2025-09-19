@@ -182,6 +182,12 @@ export * from './basic-tag';
 // グループ台帳関連のエクスポート
 export * from './group-ledger';
 
+// 有料道路関連の型定義
+export * from './toll-road';
+
+// 売上レポート関連の型定義
+export * from './sales-report';
+
 // 時間別ホステス出勤管理関連の型定義
 export type HostessAttendanceStatus = 'scheduled' | 'confirmed' | 'working' | 'break' | 'finished';
 
