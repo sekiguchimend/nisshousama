@@ -86,8 +86,8 @@ function isoToMinutes(iso: string) {
 //   return new Date(mins * MS_PER_MIN).toISOString();
 // }
 
-// function snapToFifteen(mins: number) {
-//   return Math.round(mins / 15) * 15;
+// function snapToOne(mins: number) {
+//   return Math.round(mins / 1) * 1;
 // }
 
 function formatHourLabel(minutes: number) {
@@ -138,13 +138,13 @@ export default function TimeBasedHostessAttendance() {
     return () => ro.disconnect();
   }, []);
 
-  // 時間範囲の設定（6時〜翌5時）
+  // 時間範囲の設定（9時〜翌4:30時、右側余白のため30分延長）
   const today = new Date();
   const rangeStart = new Date(today);
-  rangeStart.setHours(6, 0, 0, 0);
+  rangeStart.setHours(9, 0, 0, 0);
   const rangeEnd = new Date(today);
   rangeEnd.setDate(rangeEnd.getDate() + 1);
-  rangeEnd.setHours(5, 0, 0, 0);
+  rangeEnd.setHours(4, 30, 0, 0);
 
   const startM = isoToMinutes(rangeStart.toISOString());
   const endM = isoToMinutes(rangeEnd.toISOString());
@@ -180,56 +180,6 @@ export default function TimeBasedHostessAttendance() {
     setActive({ id: task.id, mode });
   }
 
-  /* function movePointer(e: PointerEvent) {
-    if (!pointerState.current) return;
-    
-    const st = pointerState.current;
-    const rectLeft = containerRef.current?.getBoundingClientRect().left ?? 0;
-    const clientX = e.clientX - rectLeft;
-    const dx = clientX - st.originX;
-    const dM = dx / pxPerMin;
-
-    setTasks((prev) => {
-      const idx = prev.findIndex((t) => t.id === st.taskId);
-      if (idx === -1) return prev;
-      
-      const copy = [...prev];
-      const cur = copy[idx];
-      let newStart = st.initialStart;
-      let newEnd = st.initialEnd;
-      
-      if (st.mode === "drag") {
-        newStart = st.initialStart + dM;
-        newEnd = st.initialEnd + dM;
-        const dur = newEnd - newStart;
-        if (newStart < startM) {
-          newStart = startM;
-          newEnd = newStart + dur;
-        }
-        if (newEnd > endM) {
-          newEnd = endM;
-          newStart = newEnd - dur;
-        }
-      } else if (st.mode === "resize-left") {
-        newStart = st.initialStart + dM;
-        newStart = clamp(newStart, startM, st.initialEnd - 15);
-      } else {
-        newEnd = st.initialEnd + dM;
-        newEnd = clamp(newEnd, st.initialStart + 15, endM);
-      }
-
-      newStart = snapToFifteen(newStart);
-      newEnd = snapToFifteen(newEnd);
-
-      copy[idx] = { 
-        ...cur, 
-        start: minutesToIso(newStart), 
-        end: minutesToIso(newEnd) 
-      };
-      return copy;
-    });
-  } */
-
   function endPointer() {
     if (!pointerState.current) return;
     pointerState.current = null;
@@ -251,18 +201,22 @@ export default function TimeBasedHostessAttendance() {
     };
   }, [pxPerMin, startM, endM]);
 
-  // 時間軸の目盛り生成
+  // 時間軸の目盛り生成（重要な時間のみ表示）
   const hourTicks: number[] = [];
-  for (let hour = 6; hour <= 23; hour++) {
-    const d = new Date();
-    d.setHours(hour, 0, 0, 0);
-    hourTicks.push(isoToMinutes(d.toISOString()));
-  }
-  for (let hour = 0; hour <= 5; hour++) {
-    const d = new Date();
-    d.setDate(d.getDate() + 1);
-    d.setHours(hour, 0, 0, 0);
-    hourTicks.push(isoToMinutes(d.toISOString()));
+  // 時間区分境界線と2時間ごとの目盛りを含む重要な時間
+  const importantHours = [9, 11, 13, 15, 17, 19, 21, 23, 1, 3, 4]; // 4時も追加
+  
+  for (const hour of importantHours) {
+    if (hour >= 9 && hour <= 23) {
+      const d = new Date();
+      d.setHours(hour, 0, 0, 0);
+      hourTicks.push(isoToMinutes(d.toISOString()));
+    } else if (hour >= 0 && hour <= 4) {
+      const d = new Date();
+      d.setDate(d.getDate() + 1);
+      d.setHours(hour, 0, 0, 0);
+      hourTicks.push(isoToMinutes(d.toISOString()));
+    }
   }
 
   const formatDate = (dateString: string) => {
@@ -272,6 +226,99 @@ export default function TimeBasedHostessAttendance() {
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}/${month}/${day}`;
   };
+
+  // 時間区分の定義
+  const timeSlots = [
+    { label: '9時〜13時', start: 9, end: 13 },
+    { label: '13時〜17時', start: 13, end: 17 },
+    { label: '17時〜21時', start: 17, end: 21 },
+    { label: '21時〜1時', start: 21, end: 25 }, // 翌日1時 = 25時として扱う
+    { label: '1時〜4時', start: 1, end: 4 },
+  ];
+
+  // 時間区分別の統計計算
+  const calculateTimeSlotStats = () => {
+    return timeSlots.map(slot => {
+      let totalMinutes = 0;
+      let hostessCount = 0; // 延べ人数
+      
+      filteredTasks.forEach(task => {
+        const startDate = new Date(task.start);
+        const endDate = new Date(task.end);
+        
+        // タスクの開始・終了時間（24時間制、翌日は+24時間）
+        const startHour = startDate.getHours();
+        let endHour = endDate.getHours();
+        const startMinute = startDate.getMinutes();
+        const endMinute = endDate.getMinutes();
+        
+        // 翌日にまたがる場合の処理
+        if (endHour < startHour || (endHour === startHour && endMinute < startMinute)) {
+          endHour += 24;
+        }
+        
+        // タスクの開始・終了（分単位、翌日考慮）
+        const taskStartMin = startHour * 60 + startMinute;
+        const taskEndMin = endHour * 60 + endMinute;
+        
+        // 時間区分の開始・終了（分単位）
+        let slotStartMin: number;
+        let slotEndMin: number;
+        
+        if (slot.start === 21 && slot.end === 25) {
+          // 21時〜1時（翌日）: 21:00〜25:00（翌1:00）
+          slotStartMin = 21 * 60;
+          slotEndMin = 25 * 60;
+        } else if (slot.start === 1 && slot.end === 4) {
+          // 1時〜4時（翌日）: 25:00〜28:00（翌1:00〜翌4:00）
+          slotStartMin = 25 * 60;
+          slotEndMin = 28 * 60;
+        } else {
+          // 通常の時間区分
+          slotStartMin = slot.start * 60;
+          slotEndMin = slot.end * 60;
+        }
+        
+        // 重複時間の計算
+        const overlapStart = Math.max(slotStartMin, taskStartMin);
+        const overlapEnd = Math.min(slotEndMin, taskEndMin);
+        
+        if (overlapStart < overlapEnd) {
+          totalMinutes += overlapEnd - overlapStart;
+          hostessCount += 1; // この時間区分に勤務しているホステス数をカウント
+        }
+      });
+      
+      // 時間と分に変換 一時的に無効化
+      //const hours = Math.floor(totalMinutes / 60);
+      //const minutes = totalMinutes % 60;
+      
+      return {
+        label: slot.label,
+        totalMinutes,
+        hostessCount,
+        displayTime: `${totalMinutes}分`
+      };
+    });
+  };
+
+  const timeSlotStats = calculateTimeSlotStats();
+
+  // 総計統計の計算
+  const totalStats = {
+    totalMinutes: timeSlotStats.reduce((sum, stat) => sum + stat.totalMinutes, 0),
+    totalHostessCount: timeSlotStats.reduce((sum, stat) => sum + stat.hostessCount, 0),
+  };
+
+  const totalDisplayTime = `${totalStats.totalMinutes}分`;
+
+  // 各区分に割合を追加
+  const timeSlotStatsWithPercentage = timeSlotStats.map(stat => ({
+    ...stat,
+    percentage: totalStats.totalMinutes > 0 
+      ? Math.round((stat.totalMinutes / totalStats.totalMinutes) * 100 * 10) / 10 // 小数点第1位まで
+      : 0
+  }));
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -325,109 +372,143 @@ export default function TimeBasedHostessAttendance() {
           <CardContent className="p-0">
             <div className="w-full">
               <div className="flex items-center gap-4 mb-2 px-4 pt-4">
-                <div className="text-sm text-slate-600">タイムライン (6:00 〜 翌5:00)</div>
-                <div className="text-xs text-slate-500">調整スナップ: 15分</div>
+                <div className="text-sm text-slate-600">タイムライン (9:00 〜 翌4:30)</div>
+                <div className="text-xs text-slate-500">調整スナップ: 1分</div>
                 <div className="text-xs text-slate-500">総件数: {filteredTasks.length}件</div>
               </div>
 
-              <div ref={containerRef} className="w-full border rounded-lg overflow-hidden select-none mx-4" style={{ width: 'calc(100% - 2rem)' }}>
-                {/* 時間軸ヘッダー */}
-                <div className="relative h-10 bg-white border-b">
-                  <div style={{ position: "absolute", left: 0, top: 0, right: 0, bottom: 0 }}>
-                    {hourTicks.map((m) => {
-                      const x = minutesToX(m);
-                      return (
-                        <div key={m} style={{ position: "absolute", left: x }} className="-translate-x-1/2">
-                          <div className="text-xs text-slate-600 font-medium">{formatHourLabel(m)}</div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* タスク表示エリア */}
-                <div className="relative" style={{ height: Math.max(400, filteredTasks.length * 64) }}>
-                  {/* 背景グリッド */}
-                  <div style={{ position: "absolute", left: 0, right: 0, top: 0, bottom: 0 }}>
-                    {Array.from({ length: Math.ceil(totalMinutes / 60) }).map((_, i) => {
-                      const m = startM + i * 60;
-                      const x = minutesToX(m);
-                      return (
-                        <div key={i} style={{ position: "absolute", left: x, top: 0, bottom: 0, width: 1 }} className="opacity-10 bg-slate-300" />
-                      );
-                    })}
+              <div className="border rounded-lg overflow-hidden mx-4" style={{ width: 'calc(100% - 2rem)' }}>
+                <div className="flex">
+                  {/* 左側：ホステス名リスト */}
+                  <div className="w-48 bg-gray-50 border-r">
+                    {/* ヘッダー */}
+                    <div className="h-10 bg-white border-b flex items-center px-3">
+                      <div className="text-xs text-slate-600 font-medium">ホステス名</div>
+                    </div>
+                    
+                    {/* ホステスリスト */}
+                    <div className="relative" style={{ height: Math.max(400, filteredTasks.length * 64) }}>
+                      {filteredTasks.map((task, idx) => {
+                        const top = idx * 64 + 8;
+                        return (
+                          <div key={task.id} className="absolute" style={{ left: 0, top, right: 0 }}>
+                            <div className="px-3 py-2 text-sm text-slate-700">
+                              <div className="font-semibold">{task.hostessName}</div>
+                              <div className="text-xs text-slate-500">{task.location}</div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
 
-                  {/* ホステスタスク */}
-                  {filteredTasks.map((task, idx) => {
-                    const top = idx * 64 + 8;
-                    const startMin = isoToMinutes(task.start);
-                    const endMin = isoToMinutes(task.end);
-                    const left = minutesToX(startMin);
-                    const w = Math.max(80, (endMin - startMin) * pxPerMin);
-                    const isActive = active?.id === task.id;
-
-                    return (
-                      <div key={task.id} className="absolute" style={{ left: 0, top }}>
-                        {/* ホステス名ラベル */}
-                        <div className="absolute -left-48 w-44 text-sm text-slate-700 py-2">
-                          <div className="font-semibold">{task.hostessName}</div>
-                          <div className="text-xs text-slate-500">{task.location}</div>
-                        </div>
-
-                        {/* 勤務時間バー */}
-                        <div
-                          className={`rounded-md shadow-md cursor-move transition-all ${isActive ? "ring-2 ring-offset-1 ring-blue-400" : ""}`}
-                          style={{
-                            position: "absolute",
-                            left,
-                            width: w,
-                            height: 40,
-                            background: "#60a5fa",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            padding: "0 8px",
-                            color: "white",
-                            userSelect: "none",
-                          }}
-                          onPointerDown={(e) => beginPointer(e, task, "drag")}
-                          title={`${task.hostessName}: ${formatTimeRange(task.start, task.end)}`}
-                        >
-                          <div className="text-xs truncate flex-1">
-                            {task.hostessName}
-                          </div>
-
-                          {/* リサイズハンドル（右） */}
-                          <div
-                            onPointerDown={(e) => {
-                              e.stopPropagation();
-                              beginPointer(e, task, "resize-right");
-                            }}
-                            style={{ width: 12, height: "100%", cursor: "ew-resize", display: "flex", alignItems: "center", justifyContent: "center" }}
-                          >
-                            <div className="w-1 h-6 rounded bg-white/80" />
-                          </div>
-
-                          {/* リサイズハンドル（左） */}
-                          <div
-                            onPointerDown={(e) => {
-                              e.stopPropagation();
-                              beginPointer(e, task, "resize-left");
-                            }}
-                            style={{ position: "absolute", left: -8, top: 0, width: 16, height: "100%", cursor: "ew-resize" }}
-                          />
-                        </div>
-
-                        {/* 時間表示 */}
-                        <div className="absolute text-xs text-slate-600 mt-12" style={{ left }}>
-                          {formatTimeRange(task.start, task.end)}
-                        </div>
-
-                      
+                  {/* 右側：ガントチャート */}
+                  <div ref={containerRef} className="flex-1 select-none">
+                    {/* 時間軸ヘッダー */}
+                    <div className="relative h-10 bg-white border-b">
+                      <div style={{ position: "absolute", left: 0, top: 0, right: 0, bottom: 0 }}>
+                        {hourTicks.map((m) => {
+                          const x = minutesToX(m);
+                          return (
+                            <div key={m} style={{ position: "absolute", left: x }} className="-translate-x-1/2">
+                              <div className="text-xs text-slate-600 font-medium">{formatHourLabel(m)}</div>
+                            </div>
+                          );
+                        })}
                       </div>
-                    );
-                  })}
+                    </div>
+
+                    {/* タスク表示エリア */}
+                    <div className="relative" style={{ height: Math.max(400, filteredTasks.length * 64) }}>
+                      {/* 背景グリッド */}
+                      <div style={{ position: "absolute", left: 0, right: 0, top: 0, bottom: 0 }}>
+                        {Array.from({ length: Math.ceil(totalMinutes / 60) }).map((_, i) => {
+                          const m = startM + i * 60;
+                          const x = minutesToX(m);
+                          const hour = new Date(m * MS_PER_MIN).getHours();
+                          
+                          // 重要な時間のみ表示（時間区分境界線 + 目盛り表示時間）
+                          const importantHours = [9, 11, 13, 15, 17, 19, 21, 23, 1, 3, 4];
+                          const isBoundary = [9, 13, 17, 21, 1, 4].includes(hour);
+                          const isImportantHour = importantHours.includes(hour);
+                          
+                          if (!isImportantHour) {
+                            return null; // 重要でない時間は表示しない
+                          }
+                          
+                          const lineWidth = isBoundary ? 3 : 1;
+                          const opacity = isBoundary ? "opacity-50" : "opacity-20";
+                          const bgColor = isBoundary ? "bg-blue-500" : "bg-gray-400";
+                          
+                          return (
+                            <div 
+                              key={i} 
+                              style={{ position: "absolute", left: x, top: 0, bottom: 0, width: lineWidth }} 
+                              className={`${opacity} ${bgColor}`} 
+                            />
+                          );
+                        })}
+                      </div>
+
+                      {/* ホステスタスク */}
+                      {filteredTasks.map((task, idx) => {
+                        const top = idx * 64 + 8;
+                        const startMin = isoToMinutes(task.start);
+                        const endMin = isoToMinutes(task.end);
+                        const left = minutesToX(startMin);
+                        const w = Math.max(80, (endMin - startMin) * pxPerMin);
+                        const isActive = active?.id === task.id;
+
+                        return (
+                          <div key={task.id} className="absolute" style={{ left: 0, top }}>
+                            {/* 勤務時間バー */}
+                            <div
+                              className={`rounded-md shadow-md cursor-move transition-all ${isActive ? "ring-2 ring-offset-1 ring-blue-400" : ""}`}
+                              style={{
+                                position: "absolute",
+                                left,
+                                width: w,
+                                height: 40,
+                                background: "#60a5fa",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                                padding: "0 8px",
+                                color: "white",
+                                userSelect: "none",
+                              }}
+                              onPointerDown={(e) => beginPointer(e, task, "drag")}
+                              title={`${task.hostessName}: ${formatTimeRange(task.start, task.end)}`}
+                            >
+                              <div className="text-xs truncate flex-1">
+                                {formatTimeRange(task.start, task.end)}
+                              </div>
+
+                              {/* リサイズハンドル（右） */}
+                              <div
+                                onPointerDown={(e) => {
+                                  e.stopPropagation();
+                                  beginPointer(e, task, "resize-right");
+                                }}
+                                style={{ width: 12, height: "100%", cursor: "ew-resize", display: "flex", alignItems: "center", justifyContent: "center" }}
+                              >
+                                <div className="w-1 h-6 rounded bg-white/80" />
+                              </div>
+
+                              {/* リサイズハンドル（左） */}
+                              <div
+                                onPointerDown={(e) => {
+                                  e.stopPropagation();
+                                  beginPointer(e, task, "resize-left");
+                                }}
+                                style={{ position: "absolute", left: -8, top: 0, width: 16, height: "100%", cursor: "ew-resize" }}
+                              />
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -435,19 +516,48 @@ export default function TimeBasedHostessAttendance() {
         </Card>
       </div>
 
-      {/* フッター - 凡例 */}
+      {/* フッター - 時間区分別統計 */}
       <div className="p-4 mt-4">
         <Card>
           <CardContent className="p-4">
-            <div className="flex flex-wrap items-center gap-6 text-xs text-gray-600">
-              <div className="flex items-center gap-2">
-                <span className="font-semibold">ステータス凡例:</span>
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {timeSlotStatsWithPercentage.map((stat, index) => (
+                <div 
+                  key={index}
+                  className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4 border border-blue-200"
+                >
+                  <div className="text-sm font-medium text-blue-800 mb-1">
+                    {stat.label}
+                  </div>
+                  <div className="text-sm font-semibold text-blue-800">
+                    {stat.hostessCount}人
+                  </div>
+                  <div className="text-lg font-bold text-blue-900 mb-1">
+                    {stat.displayTime} <span className="text-sm text-blue-700">({stat.percentage}%)</span>
+                  </div>
+                  <div className="text-lg font-bold text-blue-900 mb-1">
+                    {stat.displayTime} <span className="text-sm text-blue-700">({stat.percentage}%)</span>
+                  </div>
+                </div>
+              ))}
+              
+              {/* 総計カード */}
+              <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-4 border border-green-200">
+                <div className="text-sm font-medium text-green-800 mb-1">
+                  総計
+                </div>
+                <div className="text-sm font-semibold text-green-800">
+                  {totalStats.totalHostessCount}人
+                </div>
+                <div className="text-lg font-bold text-green-900 mb-1">
+                  {totalDisplayTime} <span className="text-sm text-green-700">(100%)</span>
+                </div>
+                <div className="text-lg font-bold text-green-900 mb-1">
+                  {totalDisplayTime} <span className="text-sm text-green-700">(100%)</span>
+                </div>
               </div>
             </div>
-
-            
-                
-
           </CardContent>
         </Card>
       </div>

@@ -15,15 +15,15 @@ export const timeBasedHostessAttendanceSampleData: TimeBasedHostessAttendance[] 
     notes: "新人研修中"
   },
   {
-    id: "attendance_001_early",
+    id: "attendance_001_morning",
     date: "2025-01-27",
-    hostessId: "H001_early",
-    hostessName: "田中美咲（早朝）",
-    startTime: "06:00",
-    endTime: "14:00",
+    hostessId: "H001_morning",
+    hostessName: "田中美咲（朝）",
+    startTime: "09:00",
+    endTime: "17:00",
     status: "finished",
     location: "本店",
-    notes: "早朝シフト"
+    notes: "朝シフト"
   },
   {
     id: "attendance_002",
@@ -42,10 +42,10 @@ export const timeBasedHostessAttendanceSampleData: TimeBasedHostessAttendance[] 
     hostessId: "H003",
     hostessName: "高橋麻衣",
     startTime: "18:00",
-    endTime: "24:00",
+    endTime: "00:00",
     status: "working",
     location: "2F店舗",
-    notes: "早番シフト"
+    notes: "夜シフト"
   },
   {
     id: "attendance_004",
@@ -130,7 +130,7 @@ export const timeBasedHostessAttendanceSampleData: TimeBasedHostessAttendance[] 
     hostessId: "H011",
     hostessName: "佐藤美咲",
     startTime: "22:30",
-    endTime: "04:30",
+    endTime: "04:00",
     status: "scheduled",
     location: "VIPルーム",
     notes: "新人歓迎会対応"
@@ -140,11 +140,11 @@ export const timeBasedHostessAttendanceSampleData: TimeBasedHostessAttendance[] 
     date: "2025-01-27",
     hostessId: "H012",
     hostessName: "小林愛美",
-    startTime: "07:00",
+    startTime: "09:00",
     endTime: "15:00",
     status: "finished",
     location: "本店",
-    notes: "早朝シフト終了"
+    notes: "朝シフト終了"
   },
   {
     id: "attendance_013",
@@ -217,11 +217,11 @@ export const timeBasedHostessAttendanceSampleData: TimeBasedHostessAttendance[] 
     date: "2025-01-27",
     hostessId: "H019",
     hostessName: "藤田さき",
-    startTime: "08:00",
+    startTime: "09:00",
     endTime: "16:00",
     status: "finished",
     location: "2F店舗",
-    notes: "早朝シフト終了"
+    notes: "朝シフト終了"
   },
   {
     id: "attendance_020",
@@ -273,7 +273,7 @@ export const timeBasedHostessAttendanceSampleData: TimeBasedHostessAttendance[] 
     hostessId: "H024",
     hostessName: "近藤あゆみ",
     startTime: "22:30",
-    endTime: "04:30",
+    endTime: "04:00",
     status: "scheduled",
     location: "2F店舗",
     notes: "最終シフト"
@@ -298,7 +298,7 @@ export const timeBasedHostessAttendanceSampleData: TimeBasedHostessAttendance[] 
     endTime: "23:00",
     status: "working",
     location: "VIPルーム",
-    notes: "特別シフト"
+    notes: "夕方シフト"
   },
   {
     id: "attendance_027",
@@ -349,18 +349,18 @@ export const timeBasedHostessAttendanceSampleData: TimeBasedHostessAttendance[] 
     date: "2025-01-27",
     hostessId: "H031",
     hostessName: "斎藤あかり",
-    startTime: "06:30",
+    startTime: "09:00",
     endTime: "14:30",
     status: "confirmed",
     location: "2F店舗",
-    notes: "早朝準備担当"
+    notes: "朝準備担当"
   },
   {
     id: "attendance_032",
     date: "2025-01-27",
     hostessId: "H032",
     hostessName: "本田麻衣",
-    startTime: "07:30",
+    startTime: "09:00",
     endTime: "15:30",
     status: "working",
     location: "本店",
@@ -371,11 +371,11 @@ export const timeBasedHostessAttendanceSampleData: TimeBasedHostessAttendance[] 
     date: "2025-01-27",
     hostessId: "H033",
     hostessName: "森田ゆり",
-    startTime: "08:30",
+    startTime: "09:00",
     endTime: "16:30",
     status: "scheduled",
     location: "VIPルーム",
-    notes: "昼シフト"
+    notes: "朝シフト"
   },
   {
     id: "attendance_034",
@@ -456,9 +456,9 @@ export const timeBasedHostessAttendanceSampleData: TimeBasedHostessAttendance[] 
   }
 ];
 
-// 時間軸の設定（幅広い時間帯をカバーする24時間表示）
+// 時間軸の設定（9時〜翌4時の時間範囲）
 export const timeSlots = [
-  6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0, 1, 2, 3, 4, 5
+  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0, 1, 2, 3, 4
 ];
 
 // 時間軸のラベル表示
@@ -471,8 +471,8 @@ export const getTimeLabel = (hour: number): string => {
 export const getTimePosition = (time: string, totalWidth: number = 800): number => {
   const [hours, minutes] = time.split(':').map(Number);
   const hour24 = hours === 0 ? 24 : hours; // 0時は24時として扱う
-  const totalMinutes = (hour24 - 6) * 60 + minutes; // 6時を基準
-  const totalAvailableMinutes = (24 - 6 + 5) * 60; // 6時～翌5時までの時間
+  const totalMinutes = (hour24 - 9) * 60 + minutes; // 9時を基準
+  const totalAvailableMinutes = (24 - 9 + 4) * 60; // 9時～翌4時までの時間
   return (totalMinutes / totalAvailableMinutes) * totalWidth;
 };
 
