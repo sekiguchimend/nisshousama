@@ -22,6 +22,7 @@ export interface ErrorResponse {
 // 各カテゴリーの型定義をエクスポート
 export * from './accounting';
 export * from './customer';
+export * from './customer-vehicle';
 export * from './hostess';
 export * from './employee';
 export * from './area-division';
@@ -182,11 +183,14 @@ export * from './basic-tag';
 // グループ台帳関連のエクスポート
 export * from './group-ledger';
 
-// 有料道路関連の型定義
+// 有料道路関連の型定義  
 export * from './toll-road';
 
 // 売上レポート関連の型定義
 export * from './sales-report';
+
+// クレジットカード関連の型定義
+export * from './credit-card';
 
 // 時間別ホステス出勤管理関連の型定義
 export type HostessAttendanceStatus = 'scheduled' | 'confirmed' | 'working' | 'break' | 'finished';

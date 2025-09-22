@@ -6,14 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowLeft, Search, Plus, FileText, Download } from "lucide-react";
+import { ArrowLeft, Search, Plus, Download } from "lucide-react";
 import type { InterviewRecord } from '@/types';
 import { interviewTypeLabels, interviewResultLabels, employmentStatusLabels } from '@/types';
-import { interviewSampleData, interviewerList, assignedStaffList, mediaList } from '@/data/interviewSampleData';
+import { interviewSampleData } from '@/data/interviewSampleData';
+// 将来の実装で使用予定: interviewerList, assignedStaffList, mediaList
 
 export default function ViewList() {
   const router = useRouter();
-  const [interviews, setInterviews] = useState<InterviewRecord[]>(interviewSampleData);
+  const [interviews] = useState<InterviewRecord[]>(interviewSampleData);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedInterviews, setSelectedInterviews] = useState<string[]>([]);
 

@@ -4,7 +4,7 @@ import './globals.css'
 import { Toaster } from "@/components/ui/toaster"
 import { Toaster as Sonner } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+// import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryProvider } from "@/providers/react-query-provider"
 
 const inter = Inter({ subsets: ['latin'] })

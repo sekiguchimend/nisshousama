@@ -11,33 +11,35 @@ import SalesReport from "@/components/daily-report/SalesReport";
 import { salesReportSampleDataList } from "@/data/salesReportSampleData";
 import MoneyInout from "@/components/daily-report/MoneyInout";
 import { moneyInoutSampleList } from "@/data/moneyInoutSampleData";
+import CreditCard from "@/components/daily-report/CreditCard";
+import { creditCardSampleList } from "@/data/creditCardSampleData";
 
 export default function DailyReport() {
   const router = useRouter();
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const handleMenuClick = () => {
-    console.log('MENUボタンがクリックされました');
+    // メニュー機能の実装予定
   };
 
   const handleListClick = () => {
-    console.log('リストボタンがクリックされました');
+    // リスト機能の実装予定
   };
 
   const handleCreditCheckClick = () => {
-    console.log('クレジット確認ボタンがクリックされました');
+    // クレジット確認機能の実装予定
   };
 
   const handleStoreCardSummaryClick = () => {
-    console.log('店別カード集計ボタンがクリックされました');
+    // 店別カード集計機能の実装予定
   };
 
   const handleAClick = () => {
-    console.log('Aボタンがクリックされました');
+    // A機能の実装予定
   };
 
   const handleBClick = () => {
-    console.log('Bボタンがクリックされました');
+    // B機能の実装予定
   };
 
   // 日付ナビゲーション関数
@@ -45,45 +47,41 @@ export default function DailyReport() {
     const newDate = new Date(currentDate);
     newDate.setDate(newDate.getDate() - 7);
     setCurrentDate(newDate);
-    console.log('1週間前:', newDate.toLocaleDateString());
   };
 
   const handlePreviousDayClick = () => {
     const newDate = new Date(currentDate);
     newDate.setDate(newDate.getDate() - 1);
     setCurrentDate(newDate);
-    console.log('前日:', newDate.toLocaleDateString());
   };
 
   const handleNextDayClick = () => {
     const newDate = new Date(currentDate);
     newDate.setDate(newDate.getDate() + 1);
     setCurrentDate(newDate);
-    console.log('翌日:', newDate.toLocaleDateString());
   };
 
   const handleWeekForwardClick = () => {
     const newDate = new Date(currentDate);
     newDate.setDate(newDate.getDate() + 7);
     setCurrentDate(newDate);
-    console.log('1週間後:', newDate.toLocaleDateString());
   };
 
   // CRUD・オーナーボタンハンドラー
   const handleNewClick = () => {
-    console.log('新規ボタンがクリックされました');
+    // 新規作成機能の実装予定
   };
 
   const handleDeleteClick = () => {
-    console.log('削除ボタンがクリックされました');
+    // 削除機能の実装予定
   };
 
   const handleSearchClick = () => {
-    console.log('検索ボタンがクリックされました');
+    // 検索機能の実装予定
   };
 
   const handleOwnerClick = () => {
-    console.log('オーナーボタンがクリックされました');
+    // オーナー機能の実装予定
   };
 
   return (
@@ -141,17 +139,6 @@ export default function DailyReport() {
                   {salesReportSampleDataList.map((data, index) => (
                     <div key={index} className="flex justify-start">
                       <SalesReport data={data} />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-            <CardContent className="p-4">
-              <div className="h-[100px] w-[782px] overflow-y-auto border border-gray-200 rounded-lg bg-gray-50 p-4">
-                <div className="space-y-1">
-                  {moneyInoutSampleList.map((data, index) => (
-                    <div key={index} className="flex justify-start">
-                      <MoneyInout data={data} />
                     </div>
                   ))}
                 </div>
@@ -226,16 +213,15 @@ export default function DailyReport() {
                 <CardHeader className="bg-red-50">
                   <h4 className="text-md font-semibold text-red-700">入金一覧</h4>
                 </CardHeader>
-                <CardContent className="p-0">
-                  <div className="h-[300px] overflow-y-auto">
-                    <div className="p-4 text-center text-gray-500">
-                      <div className="text-sm">入金データなし</div>
-                      <div className="text-xs text-gray-400 mt-1">
-                        ここに入金情報が表示されます
-                      </div>
+                <CardContent className="p-4">
+                <div className="space-y-1">
+                  {moneyInoutSampleList.map((data, index) => (
+                    <div key={index} className="flex justify-start">
+                      <MoneyInout data={data} />
                     </div>
-                  </div>
-                </CardContent>
+                  ))}
+                </div>
+            </CardContent>
               </Card>
 
               {/* 出金リスト（青） */}
@@ -243,18 +229,49 @@ export default function DailyReport() {
                 <CardHeader className="bg-blue-50">
                   <h4 className="text-md font-semibold text-blue-700">出金一覧</h4>
                 </CardHeader>
-                <CardContent className="p-0">
-                  <div className="h-[300px] overflow-y-auto">
-                    <div className="p-4 text-center text-gray-500">
-                      <div className="text-sm">出金データなし</div>
-                      <div className="text-xs text-gray-400 mt-1">
-                        ここに出金情報が表示されます
-                      </div>
+                <CardContent className="p-4">
+                <div className="space-y-1">
+                  {moneyInoutSampleList.map((data, index) => (
+                    <div key={index} className="flex justify-start">
+                      <MoneyInout data={data} />
                     </div>
-                  </div>
-                </CardContent>
+                  ))}
+                </div>
+            </CardContent>
               </Card>
             </div>
+
+            {/* クレジットカードリスト */}
+            <Card>
+              <CardHeader className="bg-purple-50">
+                <h4 className="text-md font-semibold text-purple-700">クレジットカード一覧</h4>
+              </CardHeader>
+              <CardContent className="p-4">
+                {/* ヘッダー行 */}
+                <div className="grid grid-cols-9 gap-2 text-sm font-semibold text-gray-700 pb-2 border-b-2 border-gray-300 mb-2">
+                  <div className="text-center">店舗</div>
+                  <div className="text-center">コース</div>
+                  <div className="text-center">ホステス名</div>
+                  <div className="text-right">延長料金</div>
+                  <div className="text-right">請求金額</div>
+                  <div className="text-right">店舗取分</div>
+                  <div className="text-right">ホステス取分</div>
+                  <div className="text-right">ホステス預り金</div>
+                  <div className="text-center">OUTドライバ名</div>
+                </div>
+                
+                {/* スクロール可能なデータ領域 */}
+                <div className="h-[300px] overflow-y-auto">
+                  <div className="space-y-1">
+                    {creditCardSampleList.map((data, index) => (
+                      <div key={index}>
+                        <CreditCard data={data} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>

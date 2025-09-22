@@ -17,7 +17,7 @@ import {
   getOperatorName,
   getInterchangesByExpressway 
 } from '@/data/interchangeSampleData';
-import { TollRoad } from '@/types/toll-road';
+// import { TollRoad } from '@/types/toll-road'; // 将来の実装で使用予定
 
 export default function TollRoadPage() {
   const router = useRouter();

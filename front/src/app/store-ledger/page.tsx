@@ -4,7 +4,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
@@ -17,9 +17,9 @@ import {
   storeList, 
   storeLedgerTabs, 
   StoreLedgerTab,
-  CourseFee,
-  Discount,
-  StoreOptions
+  CourseFee
+  // Discount,
+  // StoreOptions
 } from '@/types';
 
 import { useStoreLedger, useStoreBasicInfo } from '@/hooks/use-store-ledger';
@@ -67,9 +67,9 @@ export default function StoreLedger() {
     courseFees,
     staffCompositions,
     salesData,
-    isLoading,
-    errors,
-    isMutating,
+    // isLoading,
+    // errors,
+    // isMutating,
     handleDeleteCourseFee,
     handleAddCourseFee,
     handleEditCourseFee,
@@ -1452,7 +1452,7 @@ export default function StoreLedger() {
                                 onClick={() => {
                                   if (window.confirm(`${discount.discountName}を削除しますか？`)) {
                                     // 削除処理（将来実装）
-                                    console.log('削除:', discount.id);
+                                    // TODO: 削除API呼び出しを実装
                                   }
                                 }}
                               >
@@ -1556,7 +1556,7 @@ export default function StoreLedger() {
                                     onClick={() => {
                                       if (window.confirm(`${option.optionName}を削除しますか？`)) {
                                         // 削除処理（将来実装）
-                                        console.log('削除:', option.id);
+                                        // TODO: 削除API呼び出しを実装
                                       }
                                     }}
                                   >
@@ -1644,7 +1644,7 @@ export default function StoreLedger() {
                                     onClick={() => {
                                       if (window.confirm(`${option.optionName}を削除しますか？`)) {
                                         // 削除処理（将来実装）
-                                        console.log('削除:', option.id);
+                                        // TODO: 削除API呼び出しを実装
                                       }
                                     }}
                                   >

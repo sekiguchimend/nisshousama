@@ -5,11 +5,11 @@ import { useRouter } from "next/navigation";
 import { 
   Building, 
   Users, 
-  UserCheck, 
+  // UserCheck, 
   Award, 
   MapPin, 
   Hotel,
-  Calculator,
+  // Calculator,
   Settings,
   Database,
   Map,

@@ -1,6 +1,6 @@
 // 顧客関連のサンプルデータ
 
-import { Customer, CustomerPoints, CustomerVehicleInfo, GroupLedger, PointTransaction } from '@/types/customer';
+import { Customer, CustomerPoints, CustomerVehicleInfo, GroupLedger} from '@/types/customer';
 
 // 顧客台帳サンプルデータ
 export const sampleCustomers: Customer[] = [

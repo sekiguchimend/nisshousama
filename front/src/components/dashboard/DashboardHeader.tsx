@@ -1,4 +1,5 @@
-import { Search, Mail, LogOut } from "lucide-react";
+import { Search, Mail } from "lucide-react";
+// LogOut は将来のログアウト機能で使用予定
 import { BusinessCard } from "@/components/ui/business-card";
 
 export const DashboardHeader = () => {

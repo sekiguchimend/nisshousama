@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, ChevronLeft, ChevronRight, Plus, Edit, Save, X } from "lucide-react";
-import type { HostessScheduleData, WorkType, DailyWorkSchedule } from '@/types/hostess';
+import { ArrowLeft, ChevronLeft, ChevronRight, Plus, Edit } from "lucide-react";
+import type { HostessScheduleData, DailyWorkSchedule } from '@/types/hostess';
+// WorkType は将来の実装で使用予定
 
 // 今週の日付を取得する関数
 const getCurrentWeekDates = (baseDate: Date = new Date()) => {
@@ -103,7 +104,7 @@ export default function HostessSchedule() {
   const [currentWeekStart, setCurrentWeekStart] = useState(new Date());
   const [weekDates, setWeekDates] = useState<Date[]>([]);
   const [schedules, setSchedules] = useState<HostessScheduleData[]>(sampleHostessSchedules);
-  const [editingCell, setEditingCell] = useState<{ scheduleId: string; day: keyof HostessScheduleData['weeklySchedule'] } | null>(null);
+  const [, setEditingCell] = useState<{ scheduleId: string; day: keyof HostessScheduleData['weeklySchedule'] } | null>(null);
 
   useEffect(() => {
     setWeekDates(getCurrentWeekDates(currentWeekStart));
@@ -121,16 +122,16 @@ export default function HostessSchedule() {
     return `${month}/${day}`;
   };
 
-  const getWorkTypeLabel = (workType: WorkType) => {
-    const labels: Record<WorkType, string> = {
-      'full_time': '正社員',
-      'part_time': 'パート',
-      'contract': '契約',
-      'dispatch': '派遣',
-      'temp': '臨時'
-    };
-    return labels[workType];
-  };
+  // const getWorkTypeLabel = (workType: WorkType) => {
+  //   const labels: Record<WorkType, string> = {
+  //     'full_time': '正社員',
+  //     'part_time': 'パート',
+  //     'contract': '契約',
+  //     'dispatch': '派遣',
+  //     'temp': '臨時'
+  //   };
+  //   return labels[workType];
+  // };
 
   const getStatusColor = (status: HostessScheduleData['status']) => {
     switch (status) {
@@ -340,7 +341,7 @@ export default function HostessSchedule() {
                       </td>
                       {dayKeys.map((dayKey, dayIndex) => {
                         const daySchedule = schedule.weeklySchedule[dayKey];
-                        const isEditing = editingCell?.scheduleId === schedule.id && editingCell?.day === dayKey;
+                        // const isEditing = editingCell?.scheduleId === schedule.id && editingCell?.day === dayKey;
                         
                         return (
                           <td key={dayIndex} className="border border-gray-300 px-1 py-1">

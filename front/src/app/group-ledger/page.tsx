@@ -27,7 +27,7 @@ export default function GroupLedgerPage() {
 
   const handleSave = () => {
     // 保存処理（将来実装）
-    console.log('保存:', editForm);
+    // TODO: API呼び出しでデータ保存を実装
     setIsEditing(false);
     setEditForm({});
   };
@@ -37,7 +37,7 @@ export default function GroupLedgerPage() {
     setEditForm({});
   };
 
-  const updateEditForm = (field: keyof GroupMaster, value: any) => {
+  const updateEditForm = (field: keyof GroupMaster, value: unknown) => {
     setEditForm(prev => ({ ...prev, [field]: value }));
   };
 

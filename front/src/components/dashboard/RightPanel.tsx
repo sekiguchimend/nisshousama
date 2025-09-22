@@ -5,18 +5,18 @@ import { useRouter } from "next/navigation";
 import { 
   Edit3, 
   Calendar, 
-  TrendingUp, 
-  Globe, 
-  Users, 
-  Store,
-  DollarSign,
+  // TrendingUp, 
+  // Globe, 
+  // Users, 
+  // Store,
+  // DollarSign,
   BarChart3,
   Clock,
   Activity,
-  FileSpreadsheet,
+  // FileSpreadsheet,
   Unlock,
-  Download,
-  CreditCard
+  // Download,
+  // CreditCard
 } from "lucide-react";
 
 export const RightPanel = () => {

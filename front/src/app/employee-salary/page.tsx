@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, ChevronLeft, ChevronRight, Search, Calendar, Users, FileText, Calculator, BookOpen, Clock } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight, Search, Calendar, Users, FileText, Calculator, BookOpen } from "lucide-react";
 import type { EmployeeWeeklyShift, ShiftType } from '@/types/employee';
 import { shiftTypeSettings } from '@/types/employee';
 import { sampleEmployeeWeeklyShifts } from '@/data/employeeSampleData';
@@ -36,7 +36,7 @@ export default function EmployeeSalary() {
   const [currentWeekStart, setCurrentWeekStart] = useState(new Date());
   const [weekDates, setWeekDates] = useState<Date[]>([]);
   const [activeTab, setActiveTab] = useState<TabType>('weekly_schedule');
-  const [shifts, setShifts] = useState<EmployeeWeeklyShift[]>(sampleEmployeeWeeklyShifts);
+  const [shifts] = useState<EmployeeWeeklyShift[]>(sampleEmployeeWeeklyShifts);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -74,10 +74,10 @@ export default function EmployeeSalary() {
     return settings ? settings.textColor : 'text-gray-800';
   };
 
-  const getShiftLabel = (shiftType: ShiftType) => {
-    const settings = shiftTypeSettings[shiftType];
-    return settings ? settings.label : '不明';
-  };
+  // const getShiftLabel = (shiftType: ShiftType) => {
+  //   const settings = shiftTypeSettings[shiftType];
+  //   return settings ? settings.label : '不明';
+  // };
 
   const filteredShifts = shifts.filter(shift =>
     shift.name.toLowerCase().includes(searchQuery.toLowerCase()) ||

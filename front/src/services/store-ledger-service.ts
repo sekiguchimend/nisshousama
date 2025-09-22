@@ -6,8 +6,8 @@ import {
   GMDivision,
   CourseFee,
   StaffComposition,
-  SalesData,
-  StoreLedgerTab
+  SalesData
+  // StoreLedgerTab - 将来の実装で使用予定
 } from '@/types';
 
 import {

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ArrowLeft, Users } from "lucide-react";
-import type { Customer } from '@/types';
+// Customer型は将来の実装で使用予定
 
 export default function CustomerLedger() {
   const router = useRouter();

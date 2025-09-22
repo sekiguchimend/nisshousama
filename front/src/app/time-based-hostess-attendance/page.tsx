@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Search, Calendar, Users, Plus } from "lucide-react";
+import { ArrowLeft, Search, Calendar, Plus } from "lucide-react";
 import { timeBasedHostessAttendanceSampleData } from '@/data/timeBasedHostessAttendanceSampleData';
 
 // --- Types ---
@@ -21,16 +21,39 @@ export type HostessAttendanceTask = {
   notes?: string;
 };
 
+// --- Types for Data Conversion ---
+interface AttendanceDataItem {
+  id?: string;
+  startTime: string;
+  endTime: string;
+  hostessId?: string;
+  hostessName?: string;
+  location?: string;
+  notes?: string;
+  status?: string;
+}
+
 // --- Data Conversion ---
-function convertToGanttTasks(attendanceData: any[]): HostessAttendanceTask[] {
+function convertToGanttTasks(attendanceData: unknown[]): HostessAttendanceTask[] {
   return attendanceData.map(item => {
     const startDate = new Date();
     const endDate = new Date();
-    
+    // itemの型安全を担保し、unknownを型ガード
+    if (
+      typeof item !== "object" ||
+      item === null ||
+      typeof (item as AttendanceDataItem).startTime !== "string" ||
+      typeof (item as AttendanceDataItem).endTime !== "string"
+    ) {
+      throw new Error("DATA_001: attendanceDataの要素が不正です");
+    }
+    const typedItem = item as AttendanceDataItem;
+    const { startTime, endTime } = typedItem;
+
     // 時間文字列をパース
-    const [startHour, startMin] = item.startTime.split(':').map(Number);
-    const [endHour, endMin] = item.endTime.split(':').map(Number);
-    
+    const [startHour, startMin] = startTime.split(':').map(Number);
+    const [endHour, endMin] = endTime.split(':').map(Number);
+
     // 同日の場合と翌日にまたがる場合を考慮
     startDate.setHours(startHour, startMin, 0, 0);
     if (endHour < startHour) {
@@ -40,33 +63,32 @@ function convertToGanttTasks(attendanceData: any[]): HostessAttendanceTask[] {
     endDate.setHours(endHour, endMin, 0, 0);
     
     return {
-      id: item.id,
-      hostessId: item.hostessId,
-      hostessName: item.hostessName,
+      id: typedItem.id || Math.random().toString(36).substr(2, 9),
+      hostessId: typedItem.hostessId || 'unknown',
+      hostessName: typedItem.hostessName || 'ホステス名未設定',
       start: startDate.toISOString(),
       end: endDate.toISOString(),
-      status: item.status,
-      location: item.location,
-      notes: item.notes,
+      location: typedItem.location || '',
+      notes: typedItem.notes || '',
     };
   });
 }
 
 // --- Helper Functions ---
 const MS_PER_MIN = 60 * 1000;
-const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
+// const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
 function isoToMinutes(iso: string) {
   return Math.floor(new Date(iso).getTime() / MS_PER_MIN);
 }
 
-function minutesToIso(mins: number) {
-  return new Date(mins * MS_PER_MIN).toISOString();
-}
+// function minutesToIso(mins: number) {
+//   return new Date(mins * MS_PER_MIN).toISOString();
+// }
 
-function snapToFifteen(mins: number) {
-  return Math.round(mins / 15) * 15;
-}
+// function snapToFifteen(mins: number) {
+//   return Math.round(mins / 15) * 15;
+// }
 
 function formatHourLabel(minutes: number) {
   const d = new Date(minutes * MS_PER_MIN);
@@ -86,10 +108,10 @@ export default function TimeBasedHostessAttendance() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [width, setWidth] = useState(1200);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedDate, setSelectedDate] = useState('2025-01-27');
+  const [selectedDate] = useState('2025-01-27'); // 将来の日付フィルタ機能で使用予定
   
   // データの変換と状態管理
-  const [tasks, setTasks] = useState<HostessAttendanceTask[]>(
+  const [tasks] = useState<HostessAttendanceTask[]>(
     convertToGanttTasks(timeBasedHostessAttendanceSampleData)
   );
   

@@ -11,7 +11,7 @@ const MoneyInout: React.FC<MoneyInoutProps> = ({ data: moneyInoutData }) => {
             <div className=''>
                 {moneyInoutData.title}
             </div>
-            <div className='bg-blue-200 w-[100px]'>
+            <div className='w-[100px]'>
                     {formatNumber(moneyInoutData.amount)}
             </div>
         </div>

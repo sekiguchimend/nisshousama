@@ -9,12 +9,12 @@ import {
   FileText, 
   DollarSign, 
   BarChart3, 
-  Search,
+  // Search,
   TrendingUp,
-  Camera,
-  Star,
+  // Camera,
+  // Star,
   Car,
-  Building
+  // Building
 } from "lucide-react";
 
 export const LeftPanel = () => {

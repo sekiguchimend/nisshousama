@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
-import type { TodayCastData } from '@/types';
+// import type { TodayCastData } from '@/types'; // 将来の実装で使用予定
 import { sampleCastData } from '@/data/castSampleData';
 
 

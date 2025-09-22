@@ -169,8 +169,9 @@ export function useStoreLedger(initialStore?: string) {
   const handleDeleteCourseFee = async (id: string) => {
     try {
       await deleteCourseFee.mutateAsync(id);
-    } catch (error) {
-      console.error('Failed to delete course fee:', error);
+    } catch {
+      // エラーハンドリング：削除失敗時の処理
+      // TODO: ユーザーにエラーメッセージを表示
     }
   };
 
@@ -200,8 +201,9 @@ export function useStoreLedger(initialStore?: string) {
 
     try {
       await createCourseFee.mutateAsync(newCourseFee);
-    } catch (error) {
-      console.error('Failed to add course fee:', error);
+    } catch {
+      // エラーハンドリング：追加失敗時の処理
+      // TODO: ユーザーにエラーメッセージを表示
     }
   };
 
@@ -240,8 +242,9 @@ export function useStoreLedger(initialStore?: string) {
         return newForms;
       });
       setEditingCourseId(null);
-    } catch (error) {
-      console.error('Failed to save course fee:', error);
+    } catch {
+      // エラーハンドリング：保存失敗時の処理
+      // TODO: ユーザーにエラーメッセージを表示
     }
   };
 

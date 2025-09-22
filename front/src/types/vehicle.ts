@@ -51,7 +51,7 @@ export interface FuelEcoManagement {
 }
 
 // 有料道路データ
-export interface TollRoad {
+export interface VehicleTollRoad {
   id: string;
   tollRoadName: string; // 有料道路名
   routeCode: string; // ルートコード

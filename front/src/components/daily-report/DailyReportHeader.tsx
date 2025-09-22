@@ -56,8 +56,7 @@ export default function DailyReportHeader({
       const month = date.getMonth() + 1;
       const day = date.getDate();
       return `${year}年${month.toString().padStart(2, '0')}月${day.toString().padStart(2, '0')}日`;
-    } catch (error) {
-      console.error('Date formatting error:', error);
+    } catch {
       return '日付取得エラー';
     }
   };
@@ -76,8 +75,7 @@ export default function DailyReportHeader({
       const minutes = date.getMinutes();
       
       return `${year}/${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')} ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-    } catch (error) {
-      console.error('Closing date formatting error:', error);
+    } catch {
       return "日時エラー";
     }
   };
@@ -95,8 +93,7 @@ export default function DailyReportHeader({
       const minutes = date.getMinutes();
       
       return `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')} ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-    } catch (error) {
-      console.error('DateTime formatting error:', error);
+    } catch {
       return "日時エラー";
     }
   };

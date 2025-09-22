@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
-import type { HostessSchedule, StaffSchedule, DispatchData, DriverData, InDriverPendingReservation, HostessDelivery } from '@/types';
-import { sampleHostesses, sampleStaff, sampleDispatch, sampleDrivers } from '@/data/dispatchSampleData';
+// 将来の実装で使用予定の型とデータ
+// import type { HostessSchedule, StaffSchedule, DispatchData, DriverData, InDriverPendingReservation, HostessDelivery } from '@/types';
+import { sampleHostesses, sampleStaff, sampleDrivers } from '@/data/dispatchSampleData';
 
 const StatusIndicator = ({ status }: { status: string }) => {
   const getStatusColor = (status: string) => {

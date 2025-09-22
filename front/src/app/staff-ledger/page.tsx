@@ -5,8 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowLeft, Search, Plus, FileText, Download, Users } from "lucide-react";
+import { ArrowLeft, Search, Plus, Download } from "lucide-react";
 import type { StaffLedgerRecord } from '@/types';
 import {
   employmentTypeLabels,
@@ -20,7 +19,7 @@ import { staffLedgerSampleData } from '@/data/staffLedgerSampleData';
 
 export default function StaffLedger() {
   const router = useRouter();
-  const [staffs, setStaffs] = useState<StaffLedgerRecord[]>(staffLedgerSampleData);
+  const [staffs] = useState<StaffLedgerRecord[]>(staffLedgerSampleData);
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredStaffs = staffs.filter(staff =>

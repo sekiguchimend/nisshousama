@@ -6,14 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowLeft, Search, Plus, FileText, Download, Users } from "lucide-react";
+import { ArrowLeft, Search, Plus, Download } from "lucide-react";
 import type { InterviewRecord } from '@/types';
 import { interviewTypeLabels, interviewResultLabels, employmentStatusLabels } from '@/types';
 import { interviewSampleData } from '@/data/interviewSampleData';
 
 export default function InterviewList() {
   const router = useRouter();
-  const [interviews, setInterviews] = useState<InterviewRecord[]>(interviewSampleData);
+  const [interviews] = useState<InterviewRecord[]>(interviewSampleData);
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredInterviews = interviews.filter(interview =>
