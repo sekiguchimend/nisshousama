@@ -13,6 +13,10 @@ import MoneyInout from "@/components/daily-report/MoneyInout";
 import { moneyInoutSampleList } from "@/data/moneyInoutSampleData";
 import CreditCard from "@/components/daily-report/CreditCard";
 import { creditCardSampleList } from "@/data/creditCardSampleData";
+import StaffList from "@/components/daily-report/StaffList";
+import { staffSampleList } from "@/data/staffSampleData";
+import AttendanceTab from "@/components/daily-report/AttendanceTab";
+import { attendingStaffSampleList, attendingHostessSampleList } from "@/data/attendanceSampleData";
 
 export default function DailyReport() {
   const router = useRouter();
@@ -99,52 +103,70 @@ export default function DailyReport() {
       </div>
 
       {/* 日報ヘッダー */}
-      <DailyReportHeader
-        currentDate={currentDate}
-        closingDateTime={new Date(Date.now() + 8 * 60 * 60 * 1000)} // 8時間後
-        manager="田中太郎"
-        serialNumber="DRP-20250917-001"
-        createdAt={new Date(Date.now() - 3 * 60 * 60 * 1000)} // 3時間前
-        updatedAt={new Date(Date.now() - 30 * 60 * 1000)} // 30分前
-        onMenuClick={handleMenuClick}
-        onListClick={handleListClick}
-        onCreditCheckClick={handleCreditCheckClick}
-        onStoreCardSummaryClick={handleStoreCardSummaryClick}
-        onAClick={handleAClick}
-        onBClick={handleBClick}
-        onWeekBackClick={handleWeekBackClick}
-        onPreviousDayClick={handlePreviousDayClick}
-        onNextDayClick={handleNextDayClick}
-        onWeekForwardClick={handleWeekForwardClick}
-        onNewClick={handleNewClick}
-        onDeleteClick={handleDeleteClick}
-        onSearchClick={handleSearchClick}
-        onOwnerClick={handleOwnerClick}
-      />
+      <div className="mt-6">
+        <DailyReportHeader
+          currentDate={currentDate}
+          closingDateTime={new Date(Date.now() + 8 * 60 * 60 * 1000)} // 8時間後
+          manager="田中太郎"
+          serialNumber="DRP-20250917-001"
+          createdAt={new Date(Date.now() - 3 * 60 * 60 * 1000)} // 3時間前
+          updatedAt={new Date(Date.now() - 30 * 60 * 1000)} // 30分前
+          onMenuClick={handleMenuClick}
+          onListClick={handleListClick}
+          onCreditCheckClick={handleCreditCheckClick}
+          onStoreCardSummaryClick={handleStoreCardSummaryClick}
+          onAClick={handleAClick}
+          onBClick={handleBClick}
+          onWeekBackClick={handleWeekBackClick}
+          onPreviousDayClick={handlePreviousDayClick}
+          onNextDayClick={handleNextDayClick}
+          onWeekForwardClick={handleWeekForwardClick}
+          onNewClick={handleNewClick}
+          onDeleteClick={handleDeleteClick}
+          onSearchClick={handleSearchClick}
+          onOwnerClick={handleOwnerClick}
+        />
+      </div>
 
       {/* メインコンテンツ */}
       <div className="p-4">
         <div className="flex gap-6">
-          {/* 左側: 売上レポート一覧 */}
-          <Card className="flex-shrink-0">
-            <CardHeader>
-              <h3 className="text-lg font-semibold flex items-center gap-2">
-                <BarChart3 className="w-4 h-4" />
-                売上レポート一覧
-              </h3>
-            </CardHeader>
-            <CardContent className="p-4">
-              <div className="h-[600px] w-[782px] overflow-y-auto border border-gray-200 rounded-lg bg-gray-50 p-4">
-                <div className="space-y-1">
-                  {salesReportSampleDataList.map((data, index) => (
-                    <div key={index} className="flex justify-start">
-                      <SalesReport data={data} />
-                    </div>
-                  ))}
+          {/* 左側: 売上レポート一覧とスタッフリスト */}
+          <div className="flex-shrink-0 space-y-6">
+            {/* 売上レポート一覧 */}
+            <Card>
+              <CardHeader>
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <BarChart3 className="w-4 h-4" />
+                  売上レポート一覧
+                </h3>
+              </CardHeader>
+              <CardContent className="p-4">
+                <div className="h-[600px] w-[782px] overflow-y-auto border border-gray-200 rounded-lg bg-gray-50 p-4">
+                  <div className="space-y-1">
+                    {salesReportSampleDataList.map((data, index) => (
+                      <div key={index} className="flex justify-start">
+                        <SalesReport data={data} />
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+
+            {/* スタッフリスト */}
+            <Card>
+              <CardHeader className="bg-teal-50">
+                <h4 className="text-md font-semibold text-teal-700">スタッフ一覧</h4>
+              </CardHeader>
+              <CardContent className="p-4">
+                {/* スクロール可能なデータ領域 */}
+                <div className="h-[350px] w-[782px] overflow-y-auto">
+                  <StaffList staffList={staffSampleList} />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
           {/* 右側: 集計結果とリスト */}
           <div className="flex-1 space-y-6">
@@ -261,7 +283,7 @@ export default function DailyReport() {
                 </div>
                 
                 {/* スクロール可能なデータ領域 */}
-                <div className="h-[300px] overflow-y-auto">
+                <div className="h-[500px] overflow-y-auto">
                   <div className="space-y-1">
                     {creditCardSampleList.map((data, index) => (
                       <div key={index}>
@@ -273,6 +295,14 @@ export default function DailyReport() {
               </CardContent>
             </Card>
           </div>
+        </div>
+
+        {/* 下段: 出勤管理タブ */}
+        <div className="mt-6">
+          <AttendanceTab 
+            staffList={attendingStaffSampleList} 
+            hostessList={attendingHostessSampleList} 
+          />
         </div>
       </div>
     </div>

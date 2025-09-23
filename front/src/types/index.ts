@@ -192,6 +192,12 @@ export * from './sales-report';
 // クレジットカード関連の型定義
 export * from './credit-card';
 
+// スタッフ関連の型定義
+export * from './staff';
+
+// 出勤管理関連の型定義
+export * from './attendance';
+
 // 時間別ホステス出勤管理関連の型定義
 export type HostessAttendanceStatus = 'scheduled' | 'confirmed' | 'working' | 'break' | 'finished';
 
