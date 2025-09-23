@@ -9,6 +9,8 @@ export const sampleCustomers: Customer[] = [
     customerNumber: "C-00001",
     name: "田中太郎",
     nameKana: "タナカタロウ",
+    storeNumber: "001",
+    referenceMedia: "",
     company: "田中商事株式会社",
     phoneNumber: "03-1234-5678",
     email: "tanaka@example.com",
@@ -33,6 +35,8 @@ export const sampleCustomers: Customer[] = [
     customerNumber: "C-00002",
     name: "佐藤花子",
     nameKana: "サトウハナコ",
+    storeNumber: "002",
+    referenceMedia: "",
     phoneNumber: "090-8765-4321",
     email: "sato.hanako@email.com",
     address: {
@@ -56,6 +60,8 @@ export const sampleCustomers: Customer[] = [
     customerNumber: "C-00003",
     name: "鈴木次郎",
     nameKana: "スズキジロウ",
+    storeNumber: "001",
+    referenceMedia: "",
     company: "鈴木エンタープライズ",
     phoneNumber: "03-9876-5432",
     address: {

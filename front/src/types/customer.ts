@@ -6,6 +6,8 @@ export interface Customer {
   customerNumber: string; // 顧客番号
   name: string; // 顧客名
   nameKana: string; // 顧客名（カナ）
+  storeNumber?: string; // 店舗番号
+  referenceMedia?: string; // 参照メディア
   company?: string; // 会社名
   phoneNumber: string; // 電話番号
   email?: string; // メールアドレス

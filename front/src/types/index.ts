@@ -82,6 +82,19 @@ export const storeList = [
   '池袋支店'
 ];
 
+// 店舗番号と店舗名のマッピング
+export const storeMapping: Record<string, string> = {
+  '001': '本店',
+  '002': '2F店舗',
+  '003': 'VIPルーム',
+  '004': 'プライベートルーム',
+  '005': 'バーカウンター',
+  '006': '銀座支店',
+  '007': '新宿支店',
+  '008': '渋谷支店',
+  '009': '池袋支店'
+};
+
 // 面接種類の表示ラベル
 export const interviewTypeLabels: Record<InterviewType, string> = {
   driver: 'ドライバー',
