@@ -43,3 +43,6 @@ next-env.d.ts
 EasyGantt.js
 
 .vscode/
+
+# markdown directory
+md/
