@@ -3,14 +3,14 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Users, UserPlus, Search, FileText, User2, MapPin, Plus, Trash2 } from "lucide-react";
+import { FileText, User2, MapPin, Plus, Trash2, ArrowLeft } from "lucide-react";
 import { Customer, storeMapping } from '@/types';
 import { sampleCustomers } from '@/data/customerSampleData';
 
@@ -35,6 +35,21 @@ interface UsageHistory {
   status: 'completed' | 'absent'; // 'completed' = 終了（青）, 'absent' = 当日欠（赤）
 }
 
+interface PreferenceForm {
+  rank: 'A' | 'B' | 'C';
+  favoriteType: string;
+  speakingStyle: string;
+  dislikedType: string;
+}
+
+interface ReceiptForm {
+  recipient: string;
+  note: string;
+}
+
+type PetOption = 'dog' | 'cat' | 'none' | 'other';
+type WorkAreaOption = 'local' | 'business_trip';
+
 export default function CustomerLedger() {
   const router = useRouter();
   const [selectedCustomer, setSelectedCustomer] = useState<Customer>(sampleCustomers[0]);
@@ -43,6 +58,23 @@ export default function CustomerLedger() {
   ]);
   
   const [kanaFilter, setKanaFilter] = useState<string>('all');
+  const [preferenceForm, setPreferenceForm] = useState<PreferenceForm>({
+    rank: 'A',
+    favoriteType: '',
+    speakingStyle: '',
+    dislikedType: ''
+  });
+  const [petSelections, setPetSelections] = useState<Record<PetOption, boolean>>({
+    dog: false,
+    cat: false,
+    none: false,
+    other: false
+  });
+  const [workArea, setWorkArea] = useState<WorkAreaOption>('local');
+  const [receiptForm, setReceiptForm] = useState<ReceiptForm>({
+    recipient: '',
+    note: ''
+  });
   
   const [usageHistory] = useState<UsageHistory[]>([
     {
@@ -63,7 +95,7 @@ export default function CustomerLedger() {
       receptionNumber: 'R-2025-002',
       date: '2025-01-25',
       storeName: '銀座支店',
-      staffName: '田中花子',
+      staffName: 'あ',
       category: 'プレミアム',
       rank: 'S',
       startTime: '20:00',
@@ -145,6 +177,62 @@ export default function CustomerLedger() {
     return history.staffName.charAt(0) === kanaFilter;
   });
 
+  // 五十音グリッド配置（指定の並び）
+  const rawKanaRows = [
+    'あかさたなはまやらわ',
+    'いきしちにひみ　り　',
+    'うくすつぬふぬゆるを',
+    'えけせてねへめ　れ　',
+    'おこそとのほもよろん'
+  ];
+
+  const kanaGridRows: string[][] = rawKanaRows.map(row =>
+    Array.from(row).map(char => (char === '　' ? '' : char))
+  );
+
+  const petOptions: { key: PetOption; label: string }[] = [
+    { key: 'dog', label: '犬' },
+    { key: 'cat', label: '猫' },
+    { key: 'none', label: 'なし' },
+    { key: 'other', label: 'その他' }
+  ];
+
+  const handlePreferenceChange = (field: keyof PreferenceForm, value: string) => {
+    setPreferenceForm(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const togglePetSelection = (option: PetOption) => {
+    setPetSelections(prev => {
+      const next = { ...prev };
+      if (option === 'none') {
+        // 「なし」を選択したら他を解除
+        next.none = !prev.none;
+        if (next.none) {
+          next.dog = false;
+          next.cat = false;
+          next.other = false;
+        }
+      } else {
+        const newValue = !prev[option];
+        next[option] = newValue;
+        if (newValue && prev.none) {
+          next.none = false;
+        }
+      }
+      return next;
+    });
+  };
+
+  const handleReceiptChange = (field: keyof ReceiptForm, value: string) => {
+    setReceiptForm(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       {/* 戻るボタン */}
@@ -154,32 +242,10 @@ export default function CustomerLedger() {
           onClick={() => router.push('/')}
           className="flex items-center gap-2"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="h-4 w-4" />
           ダッシュボードに戻る
         </Button>
       </div>
-
-      {/* ページヘッダー */}
-      <Card className="mb-6">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Users className="w-6 h-6" />
-              <h1 className="text-2xl font-bold">顧客台帳</h1>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" className="flex items-center gap-2">
-                <Search className="w-4 h-4" />
-                検索
-              </Button>
-              <Button className="flex items-center gap-2">
-                <UserPlus className="w-4 h-4" />
-                新規登録
-              </Button>
-            </div>
-          </div>
-        </CardHeader>
-      </Card>
 
       {/* 顧客情報ヘッダー */}
       <Card className="mb-6">
@@ -255,7 +321,7 @@ export default function CustomerLedger() {
                 onChange={(e) => handleCustomerChange({ referenceMedia: e.target.value })}
                 placeholder=""
               />
-            </div>
+      </div>
 
           </div>
         </CardContent>
@@ -277,18 +343,15 @@ export default function CustomerLedger() {
             </TabsList>
             
             {/* 基本情報タブ */}
-            <TabsContent value="basic-info" className="mt-6">
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <TabsContent value="basic-info" className="mt-6 text-sm">
+              <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.3fr_1fr]">
                 
                 {/* 左カラム - 基本情報入力エリア */}
                 <div className="space-y-8">
                   
                   {/* 電話番号（複数欄） */}
                   <Card>
-                    <CardHeader>
-                      <h3 className="text-lg font-semibold">電話番号</h3>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
+                    <CardContent className="p-6 space-y-4">
                       <div className="flex gap-2">
                         <div className="flex-1">
                           <Input id="phone-other" placeholder="050-1234-5678" />
@@ -317,10 +380,7 @@ export default function CustomerLedger() {
 
                   {/* メールアドレス */}
                   <Card>
-                    <CardHeader>
-                      <h3 className="text-lg font-semibold">メールアドレス</h3>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
+                    <CardContent className="p-6 space-y-4">
                       <div>
                         <Label htmlFor="email-webmail">Webメール</Label>
                         <Input id="email-webmail" type="email" placeholder="example@gmail.com" />
@@ -338,10 +398,7 @@ export default function CustomerLedger() {
 
                   {/* 連絡方法 */}
                   <Card>
-                    <CardHeader>
-                      <h3 className="text-lg font-semibold">連絡方法</h3>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
+                    <CardContent className="p-6 space-y-4">
                       <div className="flex items-center space-x-2">
                         <Checkbox id="contact-phone" />
                         <Label htmlFor="contact-phone">電話</Label>
@@ -357,20 +414,46 @@ export default function CustomerLedger() {
                     </CardContent>
                   </Card>
                   <Card>
-                    <CardContent className="space-y-4">
-                    <div className="flex items-center space-x-2">
-                        <Checkbox id="newsletter" />
-                        <Label htmlFor="newsletter">メルマガ有無</Label>
+                    <CardContent className="p-6 space-y-4">
+                      <div className="flex flex-col gap-3">
+                        <div className="flex items-center space-x-2">
+                          <Checkbox id="newsletter" />
+                          <Label htmlFor="newsletter">メルマガ有無</Label>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <span className="text-sm font-medium text-gray-700">地元 / 出張</span>
+                          <div className="flex items-center gap-3">
+                            <label className="flex items-center gap-1">
+                              <input
+                                type="radio"
+                                name="work-area"
+                                value="local"
+                                checked={workArea === 'local'}
+                                onChange={() => setWorkArea('local')}
+                                className="h-4 w-4"
+                              />
+                              <span>地元</span>
+                            </label>
+                            <label className="flex items-center gap-1">
+                              <input
+                                type="radio"
+                                name="work-area"
+                                value="business_trip"
+                                checked={workArea === 'business_trip'}
+                                onChange={() => setWorkArea('business_trip')}
+                                className="h-4 w-4"
+                              />
+                              <span>出張</span>
+                            </label>
+                          </div>
+                        </div>
                       </div>
                     </CardContent>
                   </Card>
 
                   {/* 住所 */}
                   <Card>
-                    <CardHeader>
-                      <h3 className="text-lg font-semibold">住所</h3>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
+                    <CardContent className="p-6 space-y-4">
                       <div className="flex gap-2">
                         <div className="flex-1">
                           <Label htmlFor="zipcode">郵便番号</Label>
@@ -404,65 +487,45 @@ export default function CustomerLedger() {
 
                   {/* 地区区分 */}
                   <Card>
-                    <CardHeader>
-                      <h3 className="text-lg font-semibold">地区区分</h3>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div>
-                        <Label htmlFor="region">地域</Label>
-                        <Input id="region" placeholder="京都" />
-                      </div>
-                      <div>
-                        <Label htmlFor="area-code">コード</Label>
-                        <Input id="area-code" placeholder="21" />
-                      </div>
-                      <div>
-                        <Label htmlFor="place-name">地名</Label>
-                        <Input id="place-name" placeholder="地名を入力" />
+                    <CardContent className="p-6 space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="region">地域</Label>
+                          <Input id="region" placeholder="京都" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="area-code">コード</Label>
+                          <Input id="area-code" placeholder="21" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="place-name">地名</Label>
+                          <Input id="place-name" placeholder="地名を入力" />
+                        </div>
                       </div>
                     </CardContent>
                   </Card>
 
                   {/* 交通費・利用場所 */}
                   <Card>
-                    <CardHeader>
-                      <h3 className="text-lg font-semibold">交通費・利用場所</h3>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div>
-                        <Label htmlFor="transportation-fee">交通費</Label>
-                        <Input id="transportation-fee" type="number" placeholder="0" />
+                    <CardContent className="p-6 space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="transportation-fee">交通費</Label>
+                          <Input id="transportation-fee" type="number" placeholder="0" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="main-usage">主な利用場所</Label>
+                          <Input id="main-usage" placeholder="主な利用場所を入力" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="latitude">北緯</Label>
+                          <Input id="latitude" type="number" step="0.0001" placeholder="35.6762" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="longitude">東経</Label>
+                          <Input id="longitude" type="number" step="0.0001" placeholder="139.6503" />
+                        </div>
                       </div>
-                      <div>
-                        <Label htmlFor="main-usage">主な利用場所</Label>
-                        <Input id="main-usage" placeholder="主な利用場所を入力" />
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  {/* 位置情報 */}
-                  <Card>
-                    <CardHeader>
-                      <h3 className="text-lg font-semibold">位置情報</h3>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div>
-                        <Label htmlFor="latitude">北緯</Label>
-                        <Input id="latitude" type="number" step="0.0001" placeholder="35.6762" />
-                      </div>
-                      <div>
-                        <Label htmlFor="longitude">東経</Label>
-                        <Input id="longitude" type="number" step="0.0001" placeholder="139.6503" />
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  {/* ホテル備考 */}
-                  <Card>
-                    <CardHeader>
-                      <h3 className="text-lg font-semibold">ホテル備考</h3>
-                    </CardHeader>
-                    <CardContent>
                       <Textarea 
                         id="hotel-notes" 
                         placeholder="ホテルに関する備考を入力してください"
@@ -473,19 +536,18 @@ export default function CustomerLedger() {
 
                   {/* 車両情報 */}
                   <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-                      <h3 className="text-lg font-semibold">車両情報</h3>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={addVehicle}
-                        className="flex items-center gap-1"
-                      >
-                        <Plus className="w-4 h-4" />
-                        車両追加
-                      </Button>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
+                    <CardContent className="p-6 space-y-4">
+                      <div className="flex justify-end">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={addVehicle}
+                          className="flex items-center gap-1"
+                        >
+                          <Plus className="w-4 h-4" />
+                          車両追加
+                        </Button>
+                      </div>
                       {/* 車両リスト */}
                       <div className="space-y-3">
                         {vehicles.map((vehicle, index) => (
@@ -551,9 +613,6 @@ export default function CustomerLedger() {
 
                   {/* クレジットカード */}
                   <Card>
-                    <CardHeader>
-                      <h3 className="text-lg font-semibold">クレジットカード情報</h3>
-                    </CardHeader>
                     <CardContent className="space-y-4">
                       <div>
                         <Label htmlFor="card-number">カード番号</Label>
@@ -576,18 +635,7 @@ export default function CustomerLedger() {
 
                   {/* 備考欄 */}
                   <Card>
-                    <CardHeader>
-                      <h3 className="text-lg font-semibold">備考</h3>
-                    </CardHeader>
                     <CardContent className="space-y-4">
-                      <div>
-                        <Label htmlFor="notes">備考</Label>
-                        <Textarea 
-                          id="notes" 
-                          placeholder="備考を入力してください"
-                          className="min-h-[100px]"
-                        />
-                      </div>
                       <div>
                         <Label htmlFor="old-notes">旧備考</Label>
                         <Textarea 
@@ -602,14 +650,161 @@ export default function CustomerLedger() {
 
                 </div>
 
-                {/* 中央カラム - 準備中 */}
+                {/* 中央カラム - 好み情報 */}
                 <div className="space-y-6">
+                  <div className="flex flex-wrap gap-3">
+                    <Button size="sm" variant="outline">顧客の統計</Button>
+                    <Button size="sm" variant="outline">全履歴表示</Button>
+                    <Button size="sm" variant="outline">ポイント履歴</Button>
+                    <Button size="sm" variant="outline">初期ポイント入力</Button>
+                  </div>
                   <Card>
-                    <CardContent className="p-8">
-                      <div className="text-center text-gray-500">
-                        <FileText className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-                        <h3 className="text-lg font-semibold mb-2">中央カラム</h3>
-                        <p>このエリアは準備中です</p>
+                    <CardContent className="p-6 space-y-6">
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="notes">備考</Label>
+                          <Textarea 
+                            id="notes" 
+                            placeholder="備考を入力してください"
+                            className="min-h-[100px]"
+                          />
+                        </div>
+                      </div>
+                      {/* ランク */}
+                      <div className="space-y-2">
+                        <div className="text-sm font-medium text-gray-700">ランク (A〜C)</div>
+                        <div className="flex gap-3">
+                          {(['A', 'B', 'C'] as PreferenceForm['rank'][]).map(rankOption => (
+                            <Button
+                              key={rankOption}
+                              type="button"
+                              variant={preferenceForm.rank === rankOption ? 'default' : 'outline'}
+                              className="flex-1"
+                              onClick={() => handlePreferenceChange('rank', rankOption)}
+                            >                                {rankOption}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* 好みタイプ */}
+                      <div className="space-y-2">
+                        <Label htmlFor="favoriteType" className="text-sm font-medium text-gray-700">
+                          好みタイプ
+                        </Label>
+                        <Input
+                          id="favoriteType"
+                          value={preferenceForm.favoriteType}
+                          onChange={e => handlePreferenceChange('favoriteType', e.target.value)}
+                          placeholder="例：明るい、面倒見が良い"
+                        />
+                      </div>
+
+                      {/* 話し方 */}
+                      <div className="space-y-2">
+                        <Label htmlFor="speakingStyle" className="text-sm font-medium text-gray-700">
+                          話し方
+                        </Label>
+                        <Input
+                          id="speakingStyle"
+                          value={preferenceForm.speakingStyle}
+                          onChange={e => handlePreferenceChange('speakingStyle', e.target.value)}
+                          placeholder="例：落ち着いたトーンで、ゆっくりと話す"
+                        />
+                      </div>
+
+                      {/* 嫌いタイプ */}
+                      <div className="space-y-2">
+                        <Label htmlFor="dislikedType" className="text-sm font-medium text-gray-700">
+                          嫌いタイプ
+                        </Label>
+                        <Input
+                          id="dislikedType"
+                          value={preferenceForm.dislikedType}
+                          onChange={e => handlePreferenceChange('dislikedType', e.target.value)}
+                          placeholder="例：押しが強い、無口"
+                        />
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* ペット */}
+                  <Card>
+                    <CardContent className="p-6 space-y-4">
+                      <div className="text-sm font-medium text-gray-700">ペット</div>
+                      <div className="grid grid-cols-2 gap-3">
+                        {petOptions.map(option => (
+                          <label key={option.key} className="flex items-center gap-2 text-sm text-gray-700">
+                            <Checkbox
+                              checked={petSelections[option.key]}
+                              onCheckedChange={() => togglePetSelection(option.key)}
+                            />
+                            <span>{option.label}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                  {/* 領収書情報 */}
+                  <Card>
+                    <CardContent className="p-6 space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <Label htmlFor="receipt-recipient" className="text-sm font-medium text-gray-700">
+                            領収書宛先
+                          </Label>
+                          <Input
+                            id="receipt-recipient"
+                            value={receiptForm.recipient}
+                            onChange={e => handleReceiptChange('recipient', e.target.value)}
+                            placeholder="例：株式会社〇〇 御中"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="receipt-note" className="text-sm font-medium text-gray-700">
+                            領収書但書
+                          </Label>
+                          <Input
+                            id="receipt-note"
+                            value={receiptForm.note}
+                            onChange={e => handleReceiptChange('note', e.target.value)}
+                            placeholder="例：お品代"
+                          />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  {/* ドライバ・NG情報 */}
+                  <Card>
+                    <CardContent className="p-6 space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="first-driver" className="text-sm font-medium text-gray-700">
+                          Fisstドライバ名
+                        </Label>
+                        <Textarea
+                          id="first-driver"
+                          placeholder="Fisstドライバ名を入力してください"
+                          className="min-h-[80px]"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="shop-ng" className="text-sm font-medium text-gray-700">
+                          店NG
+                        </Label>
+                        <Textarea
+                          id="shop-ng"
+                          placeholder="店NGの情報を入力してください"
+                          className="min-h-[80px]"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <div className="text-sm font-medium text-gray-700">ホステス・顧客 NG / 連絡</div>
+                        <ul className="list-disc list-inside space-y-1 text-gray-700">
+                          <li>ホステス → 顧客NG</li>
+                          <li>顧客 → ホステスNG</li>
+                          <li>アドレス交換</li>
+                          <li>内容判明し次第実装</li>
+                        </ul>
                       </div>
                     </CardContent>
                   </Card>
@@ -618,10 +813,6 @@ export default function CustomerLedger() {
                 {/* 右カラム - 利用履歴リスト */}
                 <div className="space-y-6">
                   <Card>
-                    <CardHeader>
-                      <h3 className="text-lg font-semibold">利用履歴</h3>
-                    </CardHeader>
-                    
                     {/* カタカナフィルター */}
                     <div className="px-6 py-4 border-b bg-gray-50">
                       <div className="space-y-3">
@@ -629,7 +820,7 @@ export default function CustomerLedger() {
                         <RadioGroup 
                           value={kanaFilter} 
                           onValueChange={setKanaFilter}
-                          className="space-y-2"
+                          className="space-y-3"
                         >
                           {/* すべて */}
                           <div className="pb-2 border-b">
@@ -639,142 +830,31 @@ export default function CustomerLedger() {
                             </div>
                           </div>
 
-                          {/* あ行 */}
-                          <div className="space-y-1">
-                            <div className="text-xs text-gray-500 font-medium">あ行</div>
-                            <div className="grid grid-cols-5 gap-2">
-                              {['ア', 'イ', 'ウ', 'エ', 'オ'].map((kana) => (
-                                <div key={kana} className="flex items-center space-x-1">
-                                  <RadioGroupItem value={kana} id={`kana-${kana}`} />
-                                  <Label htmlFor={`kana-${kana}`} className="text-sm cursor-pointer">{kana}</Label>
-                                </div>
-                              ))}
-                            </div>
+                          {/* 五十音表（回転配置） */}
+                          <div className="space-y-2 overflow-x-auto">
+                            {kanaGridRows.map((row, rowIndex) => (
+                              <div key={`row-${rowIndex}`} className="flex items-center gap-2">
+                                {row.map((kana, colIndex) => (
+                                  kana ? (
+                                    <div key={`kana-${rowIndex}-${colIndex}`} className="flex items-center space-x-1">
+                                      <RadioGroupItem value={kana} id={`kana-${rowIndex}-${colIndex}`} className="scale-90" />
+                                      <Label htmlFor={`kana-${rowIndex}-${colIndex}`} className="text-sm cursor-pointer">
+                                        {kana}
+                                      </Label>
+                                    </div>
+                                  ) : (
+                                    <div key={`blank-${rowIndex}-${colIndex}`} className="w-8 h-6" />
+                                  )
+                                ))}
+                              </div>
+                            ))}
                           </div>
-
-                          {/* か行 */}
-                          <div className="space-y-1">
-                            <div className="text-xs text-gray-500 font-medium">か行</div>
-                            <div className="grid grid-cols-5 gap-2">
-                              {['カ', 'キ', 'ク', 'ケ', 'コ'].map((kana) => (
-                                <div key={kana} className="flex items-center space-x-1">
-                                  <RadioGroupItem value={kana} id={`kana-${kana}`} />
-                                  <Label htmlFor={`kana-${kana}`} className="text-sm cursor-pointer">{kana}</Label>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* さ行 */}
-                          <div className="space-y-1">
-                            <div className="text-xs text-gray-500 font-medium">さ行</div>
-                            <div className="grid grid-cols-5 gap-2">
-                              {['サ', 'シ', 'ス', 'セ', 'ソ'].map((kana) => (
-                                <div key={kana} className="flex items-center space-x-1">
-                                  <RadioGroupItem value={kana} id={`kana-${kana}`} />
-                                  <Label htmlFor={`kana-${kana}`} className="text-sm cursor-pointer">{kana}</Label>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* た行 */}
-                          <div className="space-y-1">
-                            <div className="text-xs text-gray-500 font-medium">た行</div>
-                            <div className="grid grid-cols-5 gap-2">
-                              {['タ', 'チ', 'ツ', 'テ', 'ト'].map((kana) => (
-                                <div key={kana} className="flex items-center space-x-1">
-                                  <RadioGroupItem value={kana} id={`kana-${kana}`} />
-                                  <Label htmlFor={`kana-${kana}`} className="text-sm cursor-pointer">{kana}</Label>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* な行 */}
-                          <div className="space-y-1">
-                            <div className="text-xs text-gray-500 font-medium">な行</div>
-                            <div className="grid grid-cols-5 gap-2">
-                              {['ナ', 'ニ', 'ヌ', 'ネ', 'ノ'].map((kana) => (
-                                <div key={kana} className="flex items-center space-x-1">
-                                  <RadioGroupItem value={kana} id={`kana-${kana}`} />
-                                  <Label htmlFor={`kana-${kana}`} className="text-sm cursor-pointer">{kana}</Label>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* は行 */}
-                          <div className="space-y-1">
-                            <div className="text-xs text-gray-500 font-medium">は行</div>
-                            <div className="grid grid-cols-5 gap-2">
-                              {['ハ', 'ヒ', 'フ', 'ヘ', 'ホ'].map((kana) => (
-                                <div key={kana} className="flex items-center space-x-1">
-                                  <RadioGroupItem value={kana} id={`kana-${kana}`} />
-                                  <Label htmlFor={`kana-${kana}`} className="text-sm cursor-pointer">{kana}</Label>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* ま行 */}
-                          <div className="space-y-1">
-                            <div className="text-xs text-gray-500 font-medium">ま行</div>
-                            <div className="grid grid-cols-5 gap-2">
-                              {['マ', 'ミ', 'ム', 'メ', 'モ'].map((kana) => (
-                                <div key={kana} className="flex items-center space-x-1">
-                                  <RadioGroupItem value={kana} id={`kana-${kana}`} />
-                                  <Label htmlFor={`kana-${kana}`} className="text-sm cursor-pointer">{kana}</Label>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* や行 */}
-                          <div className="space-y-1">
-                            <div className="text-xs text-gray-500 font-medium">や行</div>
-                            <div className="grid grid-cols-3 gap-2">
-                              {['ヤ', 'ユ', 'ヨ'].map((kana) => (
-                                <div key={kana} className="flex items-center space-x-1">
-                                  <RadioGroupItem value={kana} id={`kana-${kana}`} />
-                                  <Label htmlFor={`kana-${kana}`} className="text-sm cursor-pointer">{kana}</Label>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* ら行 */}
-                          <div className="space-y-1">
-                            <div className="text-xs text-gray-500 font-medium">ら行</div>
-                            <div className="grid grid-cols-5 gap-2">
-                              {['ラ', 'リ', 'ル', 'レ', 'ロ'].map((kana) => (
-                                <div key={kana} className="flex items-center space-x-1">
-                                  <RadioGroupItem value={kana} id={`kana-${kana}`} />
-                                  <Label htmlFor={`kana-${kana}`} className="text-sm cursor-pointer">{kana}</Label>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* わ行 */}
-                          <div className="space-y-1">
-                            <div className="text-xs text-gray-500 font-medium">わ行</div>
-                            <div className="grid grid-cols-3 gap-2">
-                              {['ワ', 'ヲ', 'ン'].map((kana) => (
-                                <div key={kana} className="flex items-center space-x-1">
-                                  <RadioGroupItem value={kana} id={`kana-${kana}`} />
-                                  <Label htmlFor={`kana-${kana}`} className="text-sm cursor-pointer">{kana}</Label>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-
                         </RadioGroup>
                       </div>
                     </div>
                     
                     <CardContent className="p-0">
-                      <div className="max-h-[800px] overflow-y-auto">
+                      <div className="min-h-[800px] overflow-y-auto">
                         {/* テーブルヘッダー */}
                         <div className="bg-gray-50 px-4 py-3 border-b">
                           <div className="grid grid-cols-12 gap-2 text-xs font-medium text-gray-700">
@@ -917,7 +997,7 @@ export default function CustomerLedger() {
                 <User2 className="w-16 h-16 mx-auto mb-4 text-gray-300" />
                 <h2 className="text-xl font-semibold mb-2">プロフィール</h2>
                 <p>このタブの内容は準備中です</p>
-              </div>
+          </div>
             </TabsContent>
           </Tabs>
         </CardContent>

@@ -211,6 +211,34 @@ export * from './staff';
 // 出勤管理関連の型定義
 export * from './attendance';
 
+// 手配表関連の型定義
+export * from './tehai';
+
+// スタッフ出勤管理関連の型定義（重複を避けるため特定の型のみエクスポート）
+export type {
+  StaffAttendanceData,
+  WorkType as StaffWorkType,
+  EmploymentType as StaffEmploymentType,
+  AttendanceStatus as StaffAttendanceStatus,
+  WORK_TYPE_LABELS,
+  EMPLOYMENT_TYPE_LABELS,
+  ATTENDANCE_STATUS_LABELS,
+  ATTENDANCE_STATUS_VARIANTS,
+  determineAttendanceStatus
+} from './staff-attendance';
+
+// 部署別名簿関連の型定義
+export * from './department-roster';
+
+// 出勤希望アルバイト関連の型定義
+export * from './part-time-attendance';
+
+// 有給使用者及び給料引き者関連の型定義
+export * from './leave-and-deduction';
+
+// 予約関連の型定義
+export * from './reservation';
+
 // 時間別ホステス出勤管理関連の型定義
 export type HostessAttendanceStatus = 'scheduled' | 'confirmed' | 'working' | 'break' | 'finished';
 
